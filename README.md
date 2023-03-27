@@ -5,9 +5,7 @@
 
 ```bash
 
-npm install 
-
-# 오류 발생 시
+# react-simple-snackbar 를 사용하기 위해 --legacy-peer-deps 모드로 모듈을 설치합니다.
 npm install --legacy-peer-deps
 
 npm run dev
