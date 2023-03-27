@@ -14,12 +14,15 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "typeRoots":["./node_modules/@types", "./@types"],
     "paths": {
       "@/*": ["./src/*"],
-      "@pages/*":["./src/pages/*"],
-      "@styles/*":["./src/styles/*"],
-      "@components/*":["./src/components/*"],
-      "@hooks/*":["./src/hooks/*"]
+      "@pages/*": ["./src/pages/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@models/*": ["./src/models/*"],
+      "@constants/*": ["./src/constants/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "postcss.config.js", "tailwind.config.js"],
