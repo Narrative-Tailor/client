@@ -1,16 +1,12 @@
 import {useInterval} from "usehooks-ts";
-import {useSnackbar} from "react-simple-snackbar";
+import {toast} from "react-toastify";
 
 const SNACKBAR_OPEN_TIME_MS = 2500;
 export default function useAutoSave(onSave: () => void, interval: /* ms */ number, triggered = true) {
-  const [openSnackbar] = useSnackbar({
-    position: "bottom-right",
-  });
-
   useInterval(() => {
     if (!triggered) return;
 
     onSave();
-    openSnackbar("자동저장 완료!", SNACKBAR_OPEN_TIME_MS);
+    toast("자동저장 완료!", {delay: SNACKBAR_OPEN_TIME_MS, position: "bottom-right"});
   }, interval);
 }
