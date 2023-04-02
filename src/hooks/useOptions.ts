@@ -7,7 +7,6 @@ export interface Option {
 
 const useOptions = (items: Option[], defaultOption?: Option) => {
   const [selectedOption, setSelectedOption] = useState(defaultOption);
-  const [options] = useState(items);
 
   const handleChangeOption = (event: ChangeEvent<HTMLSelectElement>) => {
     const newValue = items.find((item) => item.label === event.target.value);
@@ -15,7 +14,7 @@ const useOptions = (items: Option[], defaultOption?: Option) => {
   };
 
   return {
-    options,
+    options: items,
     selectedOption,
     handleChangeOption,
   };

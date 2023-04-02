@@ -1,5 +1,6 @@
 import {useState} from "react";
 import useInput from "./useInput";
+import {getContext} from "@/api/getContext";
 
 const useBridge = () => {
   const [bridgeParagraph, setBridgeParagraph] = useState("");
@@ -13,9 +14,6 @@ const useBridge = () => {
     setPost("");
   };
 
-  const getBridge = async (pre: string, post: string) => {
-    return Promise.resolve(`${pre} + ${post}`);
-  };
   const handleBridgeParagraph = async () => {
     const trimedPre = preParagraph.trim();
     const trimedPost = postParagraph.trim();
@@ -23,9 +21,9 @@ const useBridge = () => {
       alert("문단을 모두 입력해주세요");
       return;
     }
-    const bridged = await getBridge(trimedPre, trimedPost);
+    const {value} = await getContext({pre: trimedPre, post: trimedPost});
 
-    setBridgeParagraph(bridged);
+    setBridgeParagraph(value);
   };
 
   return {
