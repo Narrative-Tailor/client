@@ -8,7 +8,7 @@
 ul, li, ol {
   list-style: none;
 }
-textarea{
+input, textarea{
   outline: 1px solid #222;
 }
 h1 {
