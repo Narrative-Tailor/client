@@ -26,6 +26,7 @@ interface StoryState {
   addStory: (storyTitle: string, description: string, thumbnail?: File) => void;
   addChapter: (storyId: number, chapterTitle: string) => void;
   deleteChapter: (storyId: number, chapterId: number) => void;
+  saveChapter: (storyId: number, chapterId: number, title: string, content: string) => void;
 }
 
 const saveStory = (title: string, description: string, thumbnail?: File) =>
@@ -121,6 +122,32 @@ const useStoryStore = create<StoryState>()(
             const chapterToDeleteIndex = story.chapters.findIndex(({id}) => id === chapterId);
 
             story.chapters.splice(chapterToDeleteIndex, 1);
+            newStories.splice(storyIndex, 0, story);
+
+            return {...state, stories: newStories};
+          });
+        },
+        saveChapter: (storyId, chapterId, title, content) => {
+          set((state) => {
+            console.log(storyId, chapterId, title, content);
+            const newStories = [...state.stories];
+
+            const storyIndex = state.stories.findIndex(({id}) => id === storyId);
+            if (storyIndex === -1) {
+              console.error("스토리를 찾을 수 없습니다.");
+              return state;
+            }
+
+            const story = newStories.splice(storyIndex, 1)[0];
+            const chapter = story.chapters.find(({id}) => id === chapterId);
+            if (!chapter) {
+              console.error("챕터를 찾을 수 없습니다.");
+              return state;
+            }
+
+            chapter.title = title;
+            chapter.content = content ?? "";
+            chapter.updatedAt = new Date();
             newStories.splice(storyIndex, 0, story);
 
             return {...state, stories: newStories};
