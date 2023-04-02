@@ -1,29 +1,42 @@
 import {useRouter} from "next/router";
+import {useEffect, useState} from "react";
 
 import Button from "@components/atoms/Button";
 import NovelLayout from "@components/layouts/NovelLayout";
 
-import {useAutoSave, useTabs, useInput, useBridge} from "@hooks/index";
-import {useState} from "react";
-import useOptions, {Option} from "@/hooks/useOptions";
+import {useAutoSave, useTabs, useInput, useBridge, useOptions, useTextStyle} from "@hooks/index";
+import ChapterList from "@/components/editor/ChapterList";
+import useStoryStore from "@/store/storyStore";
 
 const AUTOSAVE_INTERVAL_MS = 30000;
 
 const TABS = ["맥락", "문체"];
-const OPTIONS: Option[] = [
-  {
-    label: "사극체",
-    value: "사극체",
-  },
-  {
-    label: "잼민이체",
-    value: "잼민이체",
-  },
-];
+
+const useTextStyleOptions = () => {
+  const textStyles = useTextStyle();
+  const options = textStyles
+    .filter((textStyle) => textStyle.isAvailable)
+    .map((textStyle) => ({label: textStyle.value, value: textStyle.value}));
+
+  const defaultOptions = options.length > 0 ? options[0] : undefined;
+
+  const {options: textStyleOptions, handleChangeOption, selectedOption} = useOptions(options, defaultOptions);
+
+  return {
+    options: textStyleOptions,
+    selectedOption,
+    handleChangeOption,
+  };
+};
 
 export default function Editor() {
+  const {stories, saveChapter} = useStoryStore();
   const router = useRouter();
-  const {id} = router.query as {id: string};
+  const query = router.query as unknown as {id: string; chapter?: string};
+  const {id} = query;
+
+  const currentStory = stories.find(({id: storyId}) => storyId === parseInt(id, 10));
+
   const {currentTab, handleClickTab} = useTabs(TABS);
   const {
     bridgeParagraph,
@@ -35,16 +48,19 @@ export default function Editor() {
     resetBridge,
   } = useBridge();
 
-  const {value: title, onChangeValue: onChangeTitle} = useInput();
-  const {value: content, onChangeValue: onChangeContent} = useInput();
+  const {options: textStyleOptions, handleChangeOption, selectedOption} = useTextStyleOptions();
+
+  const {value: title, onChangeValue: onChangeTitle, setValue: setTitle} = useInput();
+  const {value: content, onChangeValue: onChangeContent, setValue: setContent} = useInput();
 
   const startAutoSave = title.length > 0 || content.length > 0;
-  const handleSaveContent = async () => {
-    await Promise.resolve();
+  const handleSaveContent = () => {
+    if (!currentStory || !query?.chapter) return;
+    const chapterId = parseInt(query.chapter, 10);
+    saveChapter(currentStory.id, chapterId, title, content);
   };
   useAutoSave(handleSaveContent, AUTOSAVE_INTERVAL_MS, startAutoSave);
 
-  const {options, handleChangeOption, selectedOption} = useOptions(OPTIONS, OPTIONS[1]);
   const {value: textStyleValue, onChangeValue: onChangeTextStyleValue} = useInput();
   const [transformedText, setTransformedText] = useState("");
 
@@ -64,42 +80,71 @@ export default function Editor() {
     setTransformedText("");
   };
 
+  const handleClickChapter = (chapterId: number) => {
+    router.replace(`/${currentStory?.id}?chapter=${chapterId}`);
+  };
+
+  useEffect(() => {
+    if (!query?.chapter) {
+      setTitle("");
+      setContent("");
+      return;
+    }
+    const chapterId = parseInt(query.chapter, 10);
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const chapter = currentStory?.chapters.find(({id}) => id === chapterId);
+
+    if (!chapter) {
+      setTitle("");
+      setContent("");
+      return;
+    }
+
+    setTitle(chapter.title);
+    setContent(chapter?.content ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query?.chapter]);
+
   return (
     <NovelLayout id={id}>
-      <main className="flex min-h-[768px] flex-1 flex-col">
+      <main className="flex h-full flex-1 flex-col">
         <header className="flex h-20 w-full items-center border-b border-black bg-green-100">
           <h2>Here, book id : {id}</h2>
         </header>
         <div className="flex h-full w-full flex-1">
           <div className="flex h-full w-48 flex-col border-r border-black bg-gray-200">
-            <div className="flex h-10 w-full items-center justify-center border-b border-b-black">툴바</div>
-            <div className="flex-1">
-              <ul className="h-full w-full">
-                <li className="cursor-pointer hover:bg-gray-400">1회. 제목제목</li>
-                <li className="cursor-pointer hover:bg-gray-400">2회. 제목제목</li>
-                <li className="cursor-pointer hover:bg-gray-400">3회. 제목제목</li>
-                <li className="cursor-pointer hover:bg-gray-400">4회. 제목제목</li>
-                <li className="cursor-pointer hover:bg-gray-400">5회. 제목제목</li>
-              </ul>
-            </div>
+            <ChapterList id={id} onClickChapter={handleClickChapter} />
           </div>
           <div className="flex flex-1">
             <div className="flex flex-1 flex-col border-b border-r border-black">
-              <div className="flex h-14 w-full items-center">
-                <input
-                  type="text"
-                  placeholder="회차 제목을 입력하세요."
-                  className="h-full w-full px-4 text-lg outline outline-black"
-                  value={title}
-                  onChange={onChangeTitle}
-                />
-              </div>
-              <section className="flex flex-1">
-                <div className="flex flex-1">
-                  <textarea name="novel-content" className="flex-1 p-1" value={content} onChange={onChangeContent} />
-                </div>
-                {/* 문맥 추천 section */}
-              </section>
+              {query?.chapter && (
+                <>
+                  <div className="flex h-14 w-full items-center">
+                    <input
+                      type="text"
+                      placeholder="회차 제목을 입력하세요."
+                      className="h-full w-full px-2 text-lg outline outline-black"
+                      value={title}
+                      onChange={onChangeTitle}
+                    />
+                  </div>
+                  <section className="flex flex-1">
+                    <div className="flex flex-1">
+                      <textarea
+                        name="novel-content"
+                        placeholder="챕터 내용을 입력하세요."
+                        className="flex-1 p-2"
+                        value={content}
+                        onChange={onChangeContent}
+                        onBlur={() => {
+                          handleSaveContent();
+                        }}
+                      />
+                    </div>
+                    {/* 문맥 추천 section */}
+                  </section>
+                </>
+              )}
             </div>
             <div className="flex h-full w-60 flex-col border-b border-black">
               <div className="flex h-16 items-center justify-center gap-2 border-b border-black">
@@ -163,7 +208,7 @@ export default function Editor() {
                       value={selectedOption?.value}
                       onChange={handleChangeOption}
                     >
-                      {options.map((option) => (
+                      {textStyleOptions.map((option) => (
                         <option key={option.label} value={option.value}>
                           {option.label}
                         </option>
