@@ -3,7 +3,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     res.status(200).json({
-      value: "연결 문맥임 ㅋㅋ",
+      result: "연결 문맥임 ㅋㅋ",
     });
   }
 }

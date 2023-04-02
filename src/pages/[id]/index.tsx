@@ -13,7 +13,7 @@ const AUTOSAVE_INTERVAL_MS = 30000;
 const TABS = ["맥락", "문체"];
 
 const useTextStyleOptions = () => {
-  const textStyles = useTextStyle();
+  const {data: textStyles} = useTextStyle();
   const options = textStyles
     .filter((textStyle) => textStyle.isAvailable)
     .map((textStyle) => ({label: textStyle.value, value: textStyle.value}));
@@ -39,6 +39,7 @@ export default function Editor() {
 
   const {currentTab, handleClickTab} = useTabs(TABS);
   const {
+    isLoading: bridgeLoading,
     bridgeParagraph,
     preParagraph,
     postParagraph,
@@ -175,7 +176,10 @@ export default function Editor() {
                         onChange={onChangePreParagraph}
                       />
                     </div>
-                    {bridgeParagraph ? (
+                    {/* eslint-disable-next-line no-nested-ternary */}
+                    {bridgeLoading ? (
+                      <div className="h-40 w-full overflow-y-auto border border-black p-1">문맥을 생성중입니다...</div>
+                    ) : bridgeParagraph ? (
                       <div className="h-40 w-full overflow-y-auto border border-black p-1">
                         <p>{bridgeParagraph}</p>
                       </div>

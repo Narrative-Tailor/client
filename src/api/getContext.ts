@@ -5,9 +5,12 @@ export interface ContextRequest {
   post: string;
 }
 export interface ContextResponse {
-  value: string;
+  result: string;
 }
 export const getContext = async (data: ContextRequest) => {
-  const response = await axios.post<string, AxiosResponse<ContextResponse>>("/api/get-context", data);
+  const response = await axios.post<string, AxiosResponse<ContextResponse>>(
+    `${process.env.NEXT_PUBLIC_API_URL}/get-context`,
+    data,
+  );
   return response.data;
 };

@@ -4,17 +4,21 @@ import {TextStyle} from "@/models/textStyle";
 import {getTextStyle} from "@/api/textStyle";
 
 export default function useTextStyle() {
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<AxiosError | null>(null);
   const [textStyles, setTextStyles] = useState<TextStyle[]>([]);
 
   useEffect(() => {
     const getStyle = async () => {
+      setIsLoading(true);
       try {
         const {data} = await getTextStyle();
         setTextStyles(data);
         setError(null);
       } catch (err) {
         setError(err as AxiosError);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -30,5 +34,5 @@ export default function useTextStyle() {
     }
   }, [error]);
 
-  return textStyles;
+  return {isLoading, data: textStyles, error};
 }

@@ -3,6 +3,7 @@ import useInput from "./useInput";
 import {getContext} from "@/api/getContext";
 
 const useBridge = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [bridgeParagraph, setBridgeParagraph] = useState("");
 
   const {value: preParagraph, onChangeValue: onChangePreParagraph, setValue: setPre} = useInput();
@@ -21,12 +22,14 @@ const useBridge = () => {
       alert("문단을 모두 입력해주세요");
       return;
     }
-    const {value} = await getContext({pre: trimedPre, post: trimedPost});
-
-    setBridgeParagraph(value);
+    setIsLoading(true);
+    const {result} = await getContext({pre: trimedPre, post: trimedPost});
+    setIsLoading(false);
+    setBridgeParagraph(result);
   };
 
   return {
+    isLoading,
     bridgeParagraph,
     preParagraph,
     postParagraph,
