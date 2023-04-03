@@ -5,12 +5,14 @@ import Button from "@components/atoms/Button";
 import NovelLayout from "@components/layouts/NovelLayout";
 
 import {useAutoSave, useTabs, useInput, useBridge, useOptions, useTextStyle} from "@hooks/index";
+import axios, {AxiosError} from "axios";
+import {Typo} from "hanspell";
 import ChapterList from "@/components/editor/ChapterList";
 import useStoryStore from "@/store/storyStore";
 
 const AUTOSAVE_INTERVAL_MS = 30000;
 
-const TABS = ["맥락", "문체"];
+const TABS = ["맥락", "문체", "맞춤법"];
 
 const useTextStyleOptions = () => {
   const {data: textStyles} = useTextStyle();
@@ -53,8 +55,13 @@ export default function Editor() {
 
   const {value: title, onChangeValue: onChangeTitle, setValue: setTitle} = useInput();
   const {value: content, onChangeValue: onChangeContent, setValue: setContent} = useInput();
+  const {value: sentenceToCheck, onChangeValue: onChangeSentenceToCheck} = useInput();
+  const [checkedResult, setCheckedResult] = useState<Typo[] | null>(null);
+  const [checkedSentence, setCheckedSentence] = useState("");
+  const [showCheckedResult, setShowCheckedResult] = useState(false);
 
-  const startAutoSave = title.length > 0 || content.length > 0;
+  // const startAutoSave = false && title.length > 0 || content.length > 0;
+  const startAutoSave = false;
   const handleSaveContent = () => {
     if (!currentStory || !query?.chapter) return;
     const chapterId = parseInt(query.chapter, 10);
@@ -147,7 +154,7 @@ export default function Editor() {
                 </>
               )}
             </div>
-            <div className="flex h-full w-60 flex-col border-b border-black">
+            <div className="flex h-full w-96 flex-col border-b border-black">
               <div className="flex h-16 items-center justify-center gap-2 border-b border-black">
                 {TABS.map((tab, index) => (
                   <Button
@@ -159,7 +166,7 @@ export default function Editor() {
                   </Button>
                 ))}
               </div>
-              <section className="h-full w-60 border-l">
+              <section className="h-full w-full border-l">
                 {currentTab === "맥락" && (
                   <div className="flex h-full w-full flex-col gap-2 overflow-y-auto px-2">
                     <div className="flex items-center justify-end">
@@ -232,6 +239,84 @@ export default function Editor() {
                         </div>
                       )}
                     </div>
+                  </div>
+                )}
+                {currentTab === "맞춤법" && (
+                  <div className="flex h-full w-full flex-col gap-2 overflow-y-auto px-2">
+                    <div className="flex items-center justify-end">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCheckedResult(null);
+                          setCheckedSentence("");
+                          setShowCheckedResult(false);
+                        }}
+                      >
+                        초기화
+                      </button>
+                    </div>
+                    <div className="flex w-full flex-col items-center">
+                      <h4 className="mb-2 w-full">검사할 문장</h4>
+                      <textarea
+                        name="check-sentence"
+                        className="h-36 w-full p-1"
+                        value={sentenceToCheck}
+                        onChange={onChangeSentenceToCheck}
+                      />
+                    </div>
+                    {checkedResult === null ? (
+                      <Button
+                        onClick={async () => {
+                          try {
+                            const {data} = await axios.post<Typo[]>("/api/spell-check", {sentence: sentenceToCheck});
+                            console.log(data);
+                            setCheckedResult(data);
+                            setCheckedSentence(sentenceToCheck);
+                          } catch (error: unknown) {
+                            console.error(error as AxiosError);
+                          }
+                        }}
+                      >
+                        맞춤법 검사
+                      </Button>
+                    ) : (
+                      <div className="flex w-full flex-col items-center">
+                        <h4 className="mb-1 w-full">검사 결과</h4>
+                        <ul>
+                          {checkedResult.map((result) => (
+                            <li className="mb-4 flex flex-col gap-1" key={result.token}>
+                              <p>
+                                검사한 단어 : <span className="text-[16px] font-semibold">{result.token}</span>
+                              </p>
+                              <div className="flex">
+                                <span className="mr-2 text-[14px] font-semibold">제안 단어 :</span>
+                                {result.suggestions.map((suggestion, index) => (
+                                  <>
+                                    <span
+                                      className="cursor-pointer text-[14px] text-blue-500 hover:text-blue-700"
+                                      onClick={() => {
+                                        if (!showCheckedResult) {
+                                          setShowCheckedResult(true);
+                                        }
+                                        setCheckedSentence((prevSentence) => {
+                                          return prevSentence.replaceAll(result.token, suggestion);
+                                        });
+                                      }}
+                                    >
+                                      {suggestion}
+                                    </span>
+                                    <span className="mr-1 text-[14px]">
+                                      {index === result.suggestions.length - 1 ? "" : ","}
+                                    </span>
+                                  </>
+                                ))}
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {showCheckedResult && <textarea disabled value={checkedSentence} />}
                   </div>
                 )}
               </section>
