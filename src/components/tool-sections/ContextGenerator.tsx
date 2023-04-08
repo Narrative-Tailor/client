@@ -23,19 +23,32 @@ export default function ContextGenerator() {
       </div>
       <section className="flex flex-col gap-4 px-2">
         <div className="flex w-full flex-col items-center">
-          <h4 className="mb-2 w-full text-[16px] font-medium">사전 문맥</h4>
-          <textarea name="pre-p" className="h-36 w-full p-1" value={preParagraph} onChange={onChangePreParagraph} />
+          <h4 className="mb-2 w-full text-[18px] font-medium">사전 문맥</h4>
+          <textarea
+            name="pre-p"
+            className="h-36 w-full rounded-[5px] p-2"
+            value={preParagraph}
+            onChange={onChangePreParagraph}
+          />
         </div>
-        <div className="flex w-full flex-col items-center">
-          <h4 className="mb-2 w-full text-[16px] font-medium">사후 문맥</h4>
-          <textarea name="post-p" className="h-36 w-full p-1" value={postParagraph} onChange={onChangePostParagraph} />
-        </div>
-        {bridgeParagraph ? (
-          <div className="h-auto w-full overflow-y-auto">
-            <h4 className="mb-3 text-[16px]">중간 문맥 생성 결과</h4>
-            <p className="bg-white p-2">{bridgeParagraph}</p>
+        {bridgeParagraph && (
+          <div className="w-full">
+            <h4 className="mb-3 text-[18px]">연결 문맥</h4>
+            <div className="h-auto w-full overflow-y-auto rounded-[5px] border border-[#E8E8E6]">
+              <p className="bg-white p-2">{bridgeParagraph}</p>
+            </div>
           </div>
-        ) : (
+        )}
+        <div className="flex w-full flex-col items-center">
+          <h4 className="mb-2 w-full text-[18px] font-medium">사후 문맥</h4>
+          <textarea
+            name="post-p"
+            className="h-36 w-full rounded-[5px] p-2"
+            value={postParagraph}
+            onChange={onChangePostParagraph}
+          />
+        </div>
+        {!bridgeParagraph && (
           <Button onClick={handleBridgeParagraph} disabled={bridgeLoading}>
             중간 문맥 생성하기
           </Button>

@@ -27,8 +27,6 @@ export const useChipList = (chips: ChipListItem[]) => {
 
 export default function ChipButtonList({children}: ChipButtonListProps) {
   return (
-    <div className="flex h-12 w-full flex-wrap items-center justify-center gap-1 rounded-full bg-gray-100 p-1">
-      {children}
-    </div>
+    <div className="flex h-12 w-full flex-wrap items-center justify-center gap-1 rounded-full p-1">{children}</div>
   );
 }

@@ -21,9 +21,14 @@ export default function Input({value, onChange, label, labelStyle = "vertical", 
         </label>
       )}
       {textareaMode ? (
-        <textarea id={`${label}-input`} className="h-32 w-full resize-none p-1" value={value} onChange={onChange} />
+        <textarea
+          id={`${label}-input`}
+          className="h-32 w-full resize-none rounded-[5px] p-1"
+          value={value}
+          onChange={onChange}
+        />
       ) : (
-        <input id={`${label}-input`} className="w-full p-1" value={value} onChange={onChange} />
+        <input id={`${label}-input`} className="w-full rounded-[5px] p-1" value={value} onChange={onChange} />
       )}
     </div>
   );

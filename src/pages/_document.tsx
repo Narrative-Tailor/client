@@ -5,6 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+        <link href="https://hangeul.pstatic.net/hangeul_static/css/maru-buri.css" rel="stylesheet" />
       </Head>
       <body>
         <Main />

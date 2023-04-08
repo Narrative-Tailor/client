@@ -18,7 +18,7 @@ export default function ImageGenerator() {
   };
   const generateImage = async () => {
     if (!value) {
-      alert("이미지 묘사를 입력해주세요");
+      alert("그림 묘사를 입력해주세요");
       return;
     }
     setIsLoading(true);
@@ -40,20 +40,20 @@ export default function ImageGenerator() {
   return (
     <div className="flex w-full flex-col gap-2 px-4">
       <div className="mt-2 flex items-center justify-between p-2">
-        <h4 className="text-lg">묘사 이미지 생성</h4>
+        <h4 className="text-lg">그림 생성</h4>
         <ResetButton onClick={resetImage} />
       </div>
       <div className="flex flex-col gap-2 px-2">
         <textarea
-          className="h-60 w-full p-1"
-          placeholder="생성하고 싶은 이미지를 묘사해주세요!"
+          className="h-60 w-full rounded-[5px] p-1"
+          placeholder="생성하고 싶은 그림을 묘사해주세요!"
           value={value}
           onChange={onChangeValue}
         />
         <Button onClick={generateImage} disabled={isLoading}>
-          이미지 생성하기
+          그림 생성하기
         </Button>
-        {isLoading && <p>이미지를 생성중입니다.</p>}
+        {isLoading && <p>그림을 생성중입니다.</p>}
         {error && <p className="text-red-500">{error.message}</p>}
       </div>
       {!isLoading && image && (

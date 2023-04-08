@@ -23,7 +23,7 @@ function StoryItem({story}: {story: Story}) {
           )}
         </div>
         <div className="h-full w-full p-2">
-          <h3 className="pb-2 text-lg font-medium">{title}</h3>
+          <h3 className="title pb-2 text-lg">{title}</h3>
           {description && <p className="text-sm">{description}</p>}
         </div>
       </div>

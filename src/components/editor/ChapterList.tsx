@@ -66,12 +66,12 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
 
   return (
     <div className="h-full w-full">
-      <div className="flex items-center justify-between">
-        <Link href="/" className="flex items-center justify-between gap-4 whitespace-nowrap p-2 text-[24px]">
-          <img src={logoImage.src} alt="로고" className="h-8 w-8" />
+      <div className="flex w-full items-center justify-between  py-2 ">
+        <Link href="/" className="flex h-full items-center justify-center gap-2 whitespace-nowrap px-2 text-xl">
+          <img src={logoImage.src} alt="로고" className="h-9 w-9" />
           {menuOpened ? "Narrative Tailor" : ""}
         </Link>
-        <button onClick={handleMenu} className="h-8 w-8">
+        <button onClick={handleMenu} className="h-7 w-7">
           {menuOpened ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +79,7 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-8 w-8"
+              className="h-7 w-7"
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
@@ -90,7 +90,7 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-8 w-8"
+              className="h-7 w-7"
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
@@ -151,7 +151,8 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
         {isAdding && (
           <input
             ref={chapterTitleRef}
-            className="w-full px-2 py-1 outline outline-black"
+            placeholder="챕터 제목을 입력해주세요."
+            className="w-full rounded-[5px] border border-[#E8E8E6] px-2 py-1"
             value={chapterTitle}
             onChange={onChangeChapterTitle}
             onBlur={() => {

@@ -22,6 +22,9 @@ export default function TextStyleGenerator({textStyles, loading}: {textStyles: T
     if (!selectedOption || options.length === 0) {
       return;
     }
+    if (!textStyleValue) {
+      alert("변환할 문장을 입력해주세요.");
+    }
 
     setIsLoading(true);
     setError(null);
@@ -58,7 +61,11 @@ export default function TextStyleGenerator({textStyles, loading}: {textStyles: T
       </div>
       {!loading && (
         <section className="flex flex-col gap-4 px-2">
-          <select className="rounded-sm p-2 text-[14px]" value={selectedOption?.value} onChange={handleChangeOption}>
+          <select
+            className="rounded-[5px] border border-[#E8E8E6] p-2 text-[14px]"
+            value={selectedOption?.value}
+            onChange={handleChangeOption}
+          >
             {options.map((option) => (
               <option key={option.label} value={option.value} className="p-1 text-[14px]">
                 {option.label}
@@ -67,7 +74,7 @@ export default function TextStyleGenerator({textStyles, loading}: {textStyles: T
           </select>
           <div className="flex flex-col gap-2">
             <textarea
-              className="h-52 resize-none overflow-auto p-1"
+              className="h-52 resize-none overflow-auto rounded-[5px] p-1"
               value={textStyleValue}
               onChange={onChangeTextStyleValue}
             />
