@@ -70,7 +70,6 @@ export default function MMGenerator() {
               {mm.map((word, idx) => (
                 <ChipButton
                   key={`${word}-${idx + 1}`}
-                  disabled
                   label={word}
                   isSelected={false}
                   onClick={() => {}}
