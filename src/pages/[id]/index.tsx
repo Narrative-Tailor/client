@@ -20,7 +20,6 @@ import TextStyleGenerator from "@/components/tool-sections/TextStyleGenerator";
 import ImageGenerator from "@/components/tool-sections/ImageGenerator";
 import MMGenerator from "@/components/tool-sections/MMGenerator";
 import EpisodeGenerator from "@/components/tool-sections/EpisodeGenerator";
-import Button from "@/components/atoms/Button";
 
 const AUTOSAVE_INTERVAL_MS = 30000;
 
@@ -110,8 +109,11 @@ export default function Editor() {
               }}
             />
           </div>
-          <div className="flex h-10 w-full gap-2 border-t border-[#E8E8E6] p-2">
-            <Link href={`/${currentStory?.id}/settings`} className="flex w-full gap-2 px-4">
+          <div className="flex h-12 w-full justify-center gap-2 border-t border-[#E8E8E6]">
+            <Link
+              href={`/${currentStory?.id}/settings`}
+              className="flex h-full w-full items-center justify-center gap-2 px-4"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -127,7 +129,7 @@ export default function Editor() {
                 />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span>작품관리</span>
+              {menuOpened && <span className="ml-2 flex-1">작품관리</span>}
             </Link>
           </div>
         </div>
