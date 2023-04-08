@@ -92,23 +92,26 @@ export default function Editor() {
             }}
           />
         </div>
-        <div className="h-full w-full min-w-0 max-w-[100%] transition-transform">
-          <div className="mx-auto h-full w-[900px]" style={{marginLeft: menuOpened ? "250px" : ""}}>
-            <h3 className="px-2 pt-2 text-[20px] font-semibold">{currentStory?.title}</h3>
+        <div
+          className="h-full w-full min-w-0 max-w-[100%] py-5 pr-8  transition-all"
+          style={{paddingLeft: menuOpened ? "270px" : "60px"}}
+        >
+          <div className="h-full w-full shadow-md">
+            <h3 className="border-b border-gray-100 px-2 pt-2 text-[20px] font-semibold">{currentStory?.title}</h3>
             <div className="flex h-[calc(100%-50px)] w-full flex-1 flex-col">
               {query?.chapter && (
                 <div className="flex h-full w-full max-w-full flex-col items-start text-[16px] leading-[1.5]">
-                  <div className="flex h-14 w-full items-center border-b border-gray-100">
+                  <div className="flex w-full  items-center border-b border-gray-100 py-5">
                     <input
                       type="text"
                       placeholder="회차 제목을 입력하세요."
-                      className="h-full w-full px-2 text-3xl  outline-none"
+                      className="h-full w-full px-4 text-3xl  outline-none"
                       value={title}
                       onChange={onChangeTitle}
                     />
                   </div>
                   <textarea
-                    className="h-full w-full max-w-[900px] resize-none p-2 text-lg outline-none"
+                    className="h-full w-full max-w-[900px] resize-none p-3 text-lg outline-none"
                     name="novel-content"
                     placeholder="챕터 내용을 입력하세요."
                     value={content}
