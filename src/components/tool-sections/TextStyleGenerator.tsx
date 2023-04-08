@@ -1,5 +1,5 @@
 import Button from "@components/atoms/Button";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {AxiosError} from "axios";
 import {useInput, useOptions} from "@/hooks";
 import ResetButton from "./ResetButton";
@@ -14,7 +14,7 @@ export default function TextStyleGenerator({textStyles, loading}: {textStyles: T
   const {handleChangeOption, selectedOption} = useOptions(options, options[0]);
 
   const {value: textStyleValue, onChangeValue: onChangeTextStyleValue} = useInput();
-  const [transformedText, setTransformedText] = useState("");
+  const [transformedText, setTransformedText] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<AxiosError | null>(null);
 
@@ -31,7 +31,12 @@ export default function TextStyleGenerator({textStyles, loading}: {textStyles: T
         style: selectedOption.label,
         text: textStyleValue,
       });
-      setTransformedText(result.result);
+      setTransformedText(
+        result.result
+          .replaceAll(/변환 후:/gi, "")
+          .replaceAll(/"/gi, "")
+          .split("\n"),
+      );
     } catch (err) {
       setError(err as AxiosError);
     } finally {
@@ -40,7 +45,9 @@ export default function TextStyleGenerator({textStyles, loading}: {textStyles: T
   };
 
   const resetTransformedText = () => {
-    setTransformedText("");
+    setTransformedText([]);
+    setError(null);
+    setIsLoading(false);
   };
 
   return (
@@ -65,13 +72,17 @@ export default function TextStyleGenerator({textStyles, loading}: {textStyles: T
               onChange={onChangeTextStyleValue}
             />
 
-            {!transformedText && <Button onClick={handleTransformTextStyle}>변환하기</Button>}
+            {transformedText.length === 0 && <Button onClick={handleTransformTextStyle}>변환하기</Button>}
             {isLoading && <p>문체를 변환중입니다.</p>}
             {error && <p className="text-red-500">문체 변환중 에러가 발생하였습니다.</p>}
-            {transformedText && (
+            {transformedText.length > 0 && (
               <div className="flex h-auto min-h-[200px] flex-col overflow-auto">
                 <h4 className="mb-4">문체 변환 결과</h4>
-                <p className=" flex-1 bg-white px-2 py-1">{transformedText}</p>
+                <div className=" flex-1 bg-white px-2 py-1">
+                  {transformedText.map((text) => (
+                    <p>{text}</p>
+                  ))}
+                </div>
               </div>
             )}
           </div>
