@@ -25,6 +25,7 @@ interface StoryState {
   stories: Story[];
   addStory: (storyTitle: string, description: string, thumbnail?: File) => void;
   editStory: (id: number, title: string, description: string, thumbnail?: Thumbnail) => void;
+  deleteStory: (id: number) => void;
   addChapter: (storyId: number, chapterTitle: string) => void;
   deleteChapter: (storyId: number, chapterId: number) => void;
   saveChapter: (storyId: number, chapterId: number, title: string, content: string) => void;
@@ -98,6 +99,16 @@ const useStoryStore = create<StoryState>()(
             return {
               ...state,
             };
+          });
+        },
+        deleteStory: (id) => {
+          set((state) => {
+            const toDeleteStoryIdx = state.stories.findIndex((story) => story.id === id);
+            if (!toDeleteStoryIdx) return {...state};
+
+            state.stories.splice(toDeleteStoryIdx, 1);
+
+            return {...state};
           });
         },
         addChapter: (storyId, chapterTitle) => {

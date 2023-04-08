@@ -87,6 +87,13 @@ export default function Editor() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [toolbarOpened, setToolbarOpened] = useState(true);
 
+  useEffect(() => {
+    if (!currentStory) {
+      router.replace("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStory]);
+
   return (
     <div className="h-screen">
       <div className="flex h-full w-full">

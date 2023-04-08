@@ -11,7 +11,7 @@ export default function NovelSettings() {
   const router = useRouter();
   const {id} = router.query as {id: string};
 
-  const {stories, editStory} = useStoryStore();
+  const {stories, editStory, deleteStory} = useStoryStore();
   const currentStory = stories.find(({id: storyId}) => storyId === parseInt(id, 10));
 
   const {value: title, onChangeValue: onChangeTitle, setValue: setTitle} = useInput();
@@ -38,6 +38,9 @@ export default function NovelSettings() {
     alert("저장되었습니다.");
   };
   useEffect(() => {
+    if (!currentStory) {
+      router.replace("/");
+    }
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const {title, description, thumbnail} = {...currentStory};
     if (!title || !description) return;
@@ -51,6 +54,16 @@ export default function NovelSettings() {
   const handleChangeThumbnail = (files: FileList) => {
     if (files[0]) {
       setThumbnail(files[0]);
+    }
+  };
+
+  const handleDelete = () => {
+    if (!id) return;
+
+    if (window.confirm("정말로 작품을 삭제하시겠습니까? 작업은 취소할 수 없습니다.")) {
+      deleteStory(parseInt(id, 10));
+      alert("작품을 삭제했습니다.");
+      router.replace("/");
     }
   };
 
@@ -122,10 +135,16 @@ export default function NovelSettings() {
             />
           </div>
         </div>
-        <div className="h-20 w-full">
+        <div
+          className="flex h-20 w-full flex-col
+        items-center gap-4"
+        >
           <Button size="full" theme="primary" onClick={handleSave}>
             저장
           </Button>
+          <button className="border-none text-[14px] text-red-400" onClick={handleDelete}>
+            작품 삭제
+          </button>
         </div>
       </div>
     </NovelLayout>
