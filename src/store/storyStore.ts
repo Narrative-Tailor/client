@@ -24,15 +24,16 @@ export interface Story {
 interface StoryState {
   stories: Story[];
   addStory: (storyTitle: string, description: string, thumbnail?: File) => void;
+  editStory: (id: number, title: string, description: string, thumbnail?: Thumbnail) => void;
   addChapter: (storyId: number, chapterTitle: string) => void;
   deleteChapter: (storyId: number, chapterId: number) => void;
   saveChapter: (storyId: number, chapterId: number, title: string, content: string) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const saveStory = (title: string, description: string, thumbnail?: File) =>
   new Promise<Story>((resolve) => {
     setTimeout(() => {
-      console.log(thumbnail);
       const min = 1;
       const max = 10000;
       const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -76,10 +77,26 @@ const useStoryStore = create<StoryState>()(
           const newStory = await saveStory(title, description, thumbnail);
 
           set((state) => {
-            console.log("new story", newStory);
             return {
               ...state,
               stories: [...state.stories, newStory],
+            };
+          });
+        },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        editStory: (id, title, description, thumbnail) => {
+          set((state) => {
+            const modifiedStory = state.stories.find((story) => story.id === id);
+            if (!modifiedStory) return {...state};
+
+            modifiedStory.title = title;
+            modifiedStory.description = description;
+            if (thumbnail) {
+              modifiedStory.thumbnail = thumbnail;
+            }
+
+            return {
+              ...state,
             };
           });
         },

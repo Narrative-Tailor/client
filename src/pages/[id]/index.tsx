@@ -77,7 +77,7 @@ export default function Editor() {
     <NovelLayout id={id}>
       <div className="flex h-full w-full">
         <div
-          className="fixed left-0 bottom-0 top-[45px] flex w-[240px] flex-col bg-[#F2F2F0] transition-transform"
+          className="fixed left-0 bottom-0 top-[60px] flex w-[240px] flex-col bg-[#F2F2F0] transition-transform"
           style={{
             transform: menuOpened ? "translateX(0)" : "translateX(calc(-100% + 32px))",
           }}
@@ -97,11 +97,11 @@ export default function Editor() {
           style={{paddingLeft: menuOpened ? "270px" : "60px"}}
         >
           <div className="h-full w-full shadow-md">
-            <h3 className="border-b border-gray-100 px-2 pt-2 text-[20px] font-semibold">{currentStory?.title}</h3>
+            <h3 className="border-b border-[#E8E8E6] px-2 pt-2 text-[20px] font-semibold">{currentStory?.title}</h3>
             <div className="flex h-[calc(100%-50px)] w-full flex-1 flex-col">
               {query?.chapter && (
                 <div className="flex h-full w-full max-w-full flex-col items-start text-[16px] leading-[1.5]">
-                  <div className="flex w-full  items-center border-b border-gray-100 py-5">
+                  <div className="flex w-full  items-center border-b border-[#E8E8E6] py-5">
                     <input
                       type="text"
                       placeholder="회차 제목을 입력하세요."

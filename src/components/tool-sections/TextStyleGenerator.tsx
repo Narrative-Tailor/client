@@ -55,13 +55,13 @@ export default function TextStyleGenerator() {
   return (
     <div className="flex w-full flex-col gap-2 px-4">
       <div className="mt-2 flex items-center justify-between p-2">
-        <h4 className="text-xl">문체 변환</h4>
+        <h4 className="text-lg">문체 변환</h4>
         <ResetButton onClick={resetTransformedText} />
       </div>
       <section className="flex flex-col gap-4 px-2">
-        <select className="py-1" value={selectedOption?.value} onChange={handleChangeOption}>
+        <select className="rounded-sm p-2 text-[14px]" value={selectedOption?.value} onChange={handleChangeOption}>
           {textStyleOptions.map((option) => (
-            <option key={option.label} value={option.value}>
+            <option key={option.label} value={option.value} className="p-1 text-[14px]">
               {option.label}
             </option>
           ))}

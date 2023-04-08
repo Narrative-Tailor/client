@@ -77,7 +77,7 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
                 opacity: menuOpened ? 0.99 : 0,
               }}
             >
-              <span className="flex-1 py-1">
+              <span className="flex-1 py-1 text-[14px]">
                 {index + 1}화. {chapter.title}
               </span>
 
@@ -107,7 +107,7 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
           ))}
           {!isAdding && chapters?.length === 0 && (
             <p
-              className="flex w-full cursor-pointer items-center justify-center px-2 py-1  text-[#585856] opacity-90"
+              className="flex w-full cursor-pointer items-center justify-center px-2 py-1  text-[14px] text-[#585856] opacity-90"
               onClick={handleClickAdd}
             >
               새로운 챕터를 추가해보세요.

@@ -7,12 +7,12 @@ type LayoutProps = {
 export default function HomeLayout({children}: LayoutProps) {
   return (
     <div className="relative h-screen">
-      <nav className="sticky inset-x-0 top-0 z-10 flex h-14 w-full bg-white shadow-sm">
+      <nav className="flex h-[60px] items-center justify-between overflow-hidden border-b border-[#E8E8E6] bg-white pl-[12px] pr-[10px] shadow-sm">
         <Link href="/" className="flex h-full items-center justify-center px-4 text-xl">
           Narrative Tailor
         </Link>
       </nav>
-      <main className="h-full flex-1">{children}</main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }

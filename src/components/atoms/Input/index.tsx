@@ -11,11 +11,12 @@ export interface InputProps {
 }
 
 export default function Input({value, onChange, label, labelStyle = "vertical", textareaMode = false}: InputProps) {
-  const containerStyle = `flex gap-2 ${labelStyle === "vertical" ? "flex-col" : ""}`;
+  // eslint-disable-next-line no-nested-ternary
+  const containerStyle = `flex ${labelStyle === "vertical" ? "flex-col" : textareaMode ? "" : "items-center"}`;
   return (
     <div className={containerStyle}>
       {label && (
-        <label htmlFor={`${label}-input`} className="min-w-[88px] text-lg">
+        <label htmlFor={`${label}-input`} className="mr-2 min-w-[72px] text-[16px]">
           {label}
         </label>
       )}

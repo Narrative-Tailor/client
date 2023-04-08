@@ -47,7 +47,7 @@ export default function MMGenerator() {
   return (
     <div className="flex w-full flex-col gap-2 overflow-y-auto px-4">
       <div className="mt-2 flex items-center justify-between p-2">
-        <h4 className="text-xl">연상 단어 생성</h4>
+        <h4 className="text-lg">연상 단어 생성</h4>
         <ResetButton onClick={handleReset} />
       </div>
       <div className="flex flex-col gap-4 px-2">
@@ -69,7 +69,11 @@ export default function MMGenerator() {
           </div>
         )}
         {mm !== null && mm.length === 0 && <p>생성된 단어가 없습니다.</p>}
-        {mm === null && <Button onClick={generateMM}>생성하기</Button>}
+        {mm === null && (
+          <Button onClick={generateMM} disabled={isLoading}>
+            생성하기
+          </Button>
+        )}
         {isLoading && <p>연상 단어를 생성중입니다.</p>}
         {error && <p className="text-red-500">에러가 발생했습니다.</p>}
       </div>

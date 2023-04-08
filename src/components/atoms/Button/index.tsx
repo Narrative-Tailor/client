@@ -10,10 +10,10 @@ interface ButtonProps {
 }
 
 const classes = {
-  primary: `rounded-[10px] bg-[#585856] min-w-[80px] px-4 py-2 text-white transition-opacity hover:opacity-70 disabled:bg-gray-300 disabled:text-gray-800 disabled:opacity-70`,
+  primary: `rounded-[5px] text-[14px] bg-[#585856] min-w-[80px] px-4 py-2 text-white transition-opacity hover:opacity-70 disabled:bg-gray-300 disabled:text-gray-800 disabled:opacity-70`,
   secondary:
-    "rounded-[10px] bg-gray-300 min-w-[80px] px-4 py-2 text-gray-900 transition-opacity hover:opacity-70 disabled:bg-gray-300 disabled:text-gray-800 disabled:opacity-70",
-  none: "rounded-[10px] bg-none min-w-[80px] px-4 py-2 text-gray-900 transition-opacity hover:opacity-70 disabled:bg-gray-300 disabled:text-gray-800 disabled:opacity-70",
+    "rounded-[5px] text-[14px] bg-gray-300 min-w-[80px] px-4 py-2 text-gray-900 transition-opacity hover:opacity-70 disabled:bg-gray-300 disabled:text-gray-800 disabled:opacity-70",
+  none: "rounded-[5px] text-[14px] bg-none border border-[#E8E8E6] min-w-[80px] px-4 py-2 text-gray-900 transition-opacity hover:opacity-70 disabled:bg-gray-300 disabled:text-gray-800 disabled:opacity-70",
   size: {
     full: "w-full",
     lg: "w-36",

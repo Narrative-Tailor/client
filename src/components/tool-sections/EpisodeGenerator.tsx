@@ -68,8 +68,8 @@ export default function EpisodeGenerator() {
 
   return (
     <div className="flex w-full flex-col gap-2 px-4">
-      <div className="mt-2 flex items-center justify-end gap-2 p-2">
-        <h4 className="flex-1 text-xl">에피소드 생성</h4>
+      <div className="flex items-center justify-end gap-2 p-2">
+        <h4 className="flex-1 text-lg">에피소드 생성</h4>
         <Button onClick={toggleFold} theme="none">
           {folded ? "열기" : "접기"}
         </Button>
@@ -88,7 +88,11 @@ export default function EpisodeGenerator() {
               <Input value={why} onChange={onChangeWhy} label="왜?" labelStyle="horizontal" textareaMode />
             </>
           )}
-          {!generated && <Button onClick={handleGenerate}>생성하기</Button>}
+          {!generated && (
+            <Button onClick={handleGenerate} disabled={isLoading}>
+              생성하기
+            </Button>
+          )}
           {isLoading && <p>생성중...</p>}
           {error && (
             <p className="text-sm text-red-500">에피소드 생성 중 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.</p>

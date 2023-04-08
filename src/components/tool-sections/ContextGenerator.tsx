@@ -17,32 +17,30 @@ export default function ContextGenerator() {
   } = useBridge();
 
   return (
-    <div className="relative flex w-full flex-col gap-2 overflow-y-auto px-4">
-      {bridgeLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white text-lg opacity-80">문맥 생성중</div>
-      )}
-      <div className="mt-2 flex items-center justify-end p-2">
+    <div className="relative flex w-full flex-col overflow-y-auto px-4">
+      <div className="flex items-center justify-end p-2">
         <ResetButton onClick={resetBridge} />
       </div>
       <section className="flex flex-col gap-4 px-2">
         <div className="flex w-full flex-col items-center">
-          <h4 className="mb-2 w-full font-medium">사전 문맥</h4>
+          <h4 className="mb-2 w-full text-[16px] font-medium">사전 문맥</h4>
           <textarea name="pre-p" className="h-36 w-full p-1" value={preParagraph} onChange={onChangePreParagraph} />
         </div>
         <div className="flex w-full flex-col items-center">
-          <h4 className="mb-2 w-full font-medium">사후 문맥</h4>
+          <h4 className="mb-2 w-full text-[16px] font-medium">사후 문맥</h4>
           <textarea name="post-p" className="h-36 w-full p-1" value={postParagraph} onChange={onChangePostParagraph} />
         </div>
         {bridgeParagraph ? (
           <div className="h-auto w-full overflow-y-auto">
-            <h4 className="mb-3">중간 문맥 생성 결과</h4>
+            <h4 className="mb-3 text-[16px]">중간 문맥 생성 결과</h4>
             <p className="bg-white p-2">{bridgeParagraph}</p>
           </div>
         ) : (
-          <Button onClick={handleBridgeParagraph}>
-            <span className="text-lg font-light">중간 문맥 생성하기</span>
+          <Button onClick={handleBridgeParagraph} disabled={bridgeLoading}>
+            중간 문맥 생성하기
           </Button>
         )}
+        {bridgeLoading && <div className="text-[14px]">문맥 생성중</div>}
         {error && <p className="text-sm text-red-600">문맥 생성 중 에러가 발생하였습니다.</p>}
       </section>
     </div>

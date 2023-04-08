@@ -40,7 +40,7 @@ export default function ImageGenerator() {
   return (
     <div className="flex w-full flex-col gap-2 px-4">
       <div className="mt-2 flex items-center justify-between p-2">
-        <h4 className="text-xl">묘사 이미지 생성</h4>
+        <h4 className="text-lg">묘사 이미지 생성</h4>
         <ResetButton onClick={resetImage} />
       </div>
       <div className="flex flex-col gap-2 px-2">
