@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 
 import NovelLayout from "@components/layouts/NovelLayout";
 
-import {useAutoSave, useInput} from "@hooks/index";
+import {useAutoSave, useInput, useTextStyle} from "@hooks/index";
 import ChapterList from "@/components/editor/ChapterList";
 import useStoryStore from "@/store/storyStore";
 import ChipButtonList, {ChipListItem, useChipList} from "@/components/atoms/Chip/ChipList";
@@ -21,6 +21,7 @@ const CHIPS: ChipListItem[] = TABS.map((tab, idx) => ({id: idx + 1, label: tab})
 
 export default function Editor() {
   const {stories, saveChapter} = useStoryStore();
+  const {isLoading: textStyleLoading, data: textStyles} = useTextStyle();
   const router = useRouter();
   const query = router.query as unknown as {id: string; chapter?: string};
   const {id, chapter} = query;
@@ -77,10 +78,8 @@ export default function Editor() {
     <NovelLayout id={id}>
       <div className="flex h-full w-full">
         <div
-          className="fixed left-0 bottom-0 top-[60px] flex w-[240px] flex-col bg-[#F2F2F0] transition-transform"
-          style={{
-            transform: menuOpened ? "translateX(0)" : "translateX(calc(-100% + 32px))",
-          }}
+          className="flex w-[280px] flex-col bg-[#F2F2F0] transition-all"
+          style={{width: menuOpened ? "280px" : "32px"}}
         >
           <ChapterList
             id={id}
@@ -92,12 +91,10 @@ export default function Editor() {
             }}
           />
         </div>
-        <div
-          className="h-full w-full min-w-0 max-w-[100%] py-5 pr-8  transition-all"
-          style={{paddingLeft: menuOpened ? "270px" : "60px"}}
-        >
-          <div className="h-full w-full shadow-md">
-            <h3 className="border-b border-[#E8E8E6] px-2 pt-2 text-[20px] font-semibold">{currentStory?.title}</h3>
+        <div className="flex h-full w-full min-w-0 max-w-[100%] transition-all">
+          <div className="flex-1" />
+          <div className="h-full w-full flex-[7.6] py-10">
+            <h3 className="px-4 pt-2 text-[20px] font-semibold leading-6">{currentStory?.title}</h3>
             <div className="flex h-[calc(100%-50px)] w-full flex-1 flex-col">
               {query?.chapter && (
                 <div className="flex h-full w-full max-w-full flex-col items-start text-[16px] leading-[1.5]">
@@ -111,7 +108,7 @@ export default function Editor() {
                     />
                   </div>
                   <textarea
-                    className="h-full w-full max-w-[900px] resize-none p-3 text-lg outline-none"
+                    className="h-full w-full resize-none p-3 text-lg outline-none"
                     name="novel-content"
                     placeholder="챕터 내용을 입력하세요."
                     value={content}
@@ -124,10 +121,11 @@ export default function Editor() {
               )}
             </div>
           </div>
+          <div className="flex-1" />
         </div>
         <div
-          className="flex min-h-[496px] w-[600px] flex-col bg-[#F2F2F0] transition-transform"
-          style={{transform: toolbarOpened ? "translateX(0)" : "translateX(calc(100% - 48px))"}}
+          className="flex min-h-[496px] w-[36vw] min-w-[360px] flex-col bg-[#F2F2F0] transition-transform"
+          // style={{transform: toolbarOpened ? "translateX(0)" : "translateX(calc(100% - 48px))"}}
         >
           <div className="flex w-full items-center justify-center p-2">
             <ChipButtonList>
@@ -145,7 +143,9 @@ export default function Editor() {
           </div>
           <section className="w-full overflow-auto">
             {selectedChip?.label === "맥락" && <ContextGenerator />}
-            {selectedChip?.label === "문체" && <TextStyleGenerator />}
+            {selectedChip?.label === "문체" && (
+              <TextStyleGenerator textStyles={textStyles} loading={textStyleLoading} />
+            )}
             {selectedChip?.label === "그림" && <ImageGenerator />}
             {selectedChip?.label === "MM" && <MMGenerator />}
             {selectedChip?.label === "에피소드" && <EpisodeGenerator />}

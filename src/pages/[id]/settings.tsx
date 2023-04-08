@@ -56,7 +56,7 @@ export default function NovelSettings() {
 
   return (
     <NovelLayout id={id} hideSettings>
-      <div className="mx-auto mt-5 w-full max-w-[600px] shadow-sm">
+      <div className="mx-auto mt-5 w-full max-w-[600px] ">
         <div className="flex h-full w-full flex-col p-4">
           <div className="w-full pb-4">
             <label className="text-[16px]">작품 이미지</label>

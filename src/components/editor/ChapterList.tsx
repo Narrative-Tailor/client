@@ -68,7 +68,7 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
         <ul className="h-full w-full">
           {chapters?.map((chapter, index) => (
             <li
-              className="group flex cursor-pointer items-center justify-between px-2 py-1 hover:bg-gray-200"
+              className="group flex cursor-pointer items-center justify-between px-2 py-1 transition-opacity hover:bg-gray-200"
               key={chapter.id}
               onClick={() => onClickChapter(chapter.id)}
               style={{
