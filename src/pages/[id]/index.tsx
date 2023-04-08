@@ -13,7 +13,6 @@ import TextStyleGenerator from "@/components/tool-sections/TextStyleGenerator";
 import ImageGenerator from "@/components/tool-sections/ImageGenerator";
 import MMGenerator from "@/components/tool-sections/MMGenerator";
 import EpisodeGenerator from "@/components/tool-sections/EpisodeGenerator";
-import Button from "@/components/atoms/Button";
 
 const AUTOSAVE_INTERVAL_MS = 30000;
 
@@ -71,6 +70,7 @@ export default function Editor() {
   }, [query?.chapter]);
 
   const [menuOpened, setMenuOpened] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [toolbarOpened, setToolbarOpened] = useState(true);
 
   return (

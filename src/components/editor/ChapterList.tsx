@@ -24,7 +24,7 @@ const useToolbar = (storyId: number) => {
 
 type ChapterListProps = {
   id: string;
-  chapterId: string;
+  chapterId: string | undefined;
   menuOpened: boolean;
   onClickChapter: (id: number) => void;
   handleMenu: () => void;
@@ -72,8 +72,8 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
               key={chapter.id}
               onClick={() => onClickChapter(chapter.id)}
               style={{
-                background: parseInt(chapterId, 10) === chapter.id ? "#585856" : "",
-                color: parseInt(chapterId, 10) === chapter.id ? "white" : "black",
+                background: chapterId && parseInt(chapterId, 10) === chapter.id ? "#585856" : "",
+                color: chapterId && parseInt(chapterId, 10) === chapter.id ? "white" : "black",
               }}
             >
               <span className="flex-1 py-1">
