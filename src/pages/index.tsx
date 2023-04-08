@@ -17,7 +17,10 @@ function StoryItem({story}: {story: Story}) {
   };
 
   return (
-    <div className="flex h-40 w-full cursor-pointer items-center justify-center p-4 shadow-sm" onClick={goNovelPage}>
+    <div
+      className="flex h-40 w-full cursor-pointer items-center justify-center border border-[#e8e8e6] p-4"
+      onClick={goNovelPage}
+    >
       <div className="flex h-36 w-full items-center justify-center">
         <div className="aspect-square w-40 bg-[#F2F2F0]">
           {story.thumbnail && (
@@ -39,19 +42,22 @@ export default function Home() {
   const {isOpen, openModal, closeModal, makeNewStory} = useCreateNovelModal();
 
   return (
-    <Layout>
-      <div className="mx-auto max-w-[1024px]">
-        <div className="flex h-[80px] w-full items-center justify-between gap-2 px-4">
-          <h2 className="flex gap-2">
+    <Layout
+      rightButtons={
+        <Button theme="none" onClick={openModal}>
+          작품 추가
+        </Button>
+      }
+    >
+      <div className="relative mx-auto max-w-[1024px]">
+        <div className="my-6 flex w-full flex-col items-center justify-center gap-5 px-4">
+          <h2 className="flex flex-col items-center justify-center gap-2 py-5 text-2xl">
             <img src={bookImage.src} alt="" className="h-10 w-10" />
             작가님의 작품 목록
           </h2>
-          <Button theme="primary" onClick={openModal}>
-            작품 추가
-          </Button>
         </div>
 
-        <div className="w-full">
+        <div className="flex w-full flex-col gap-4">
           {mounted && stories.map((story) => <StoryItem story={story} key={`story-${story.id}`} />)}
         </div>
       </div>
