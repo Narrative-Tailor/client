@@ -9,7 +9,7 @@ import useStoryStore, {Story} from "@/store/storyStore";
 import Button from "@/components/atoms/Button";
 
 function StoryItem({story}: {story: Story}) {
-  const {id, title, description} = story;
+  const {id, title, description, chapters} = story;
   const router = useRouter();
 
   const goNovelPage = async () => {
@@ -18,18 +18,21 @@ function StoryItem({story}: {story: Story}) {
 
   return (
     <div
-      className="flex h-40 w-full cursor-pointer items-center justify-center border border-[#e8e8e6] p-4"
+      className="flex h-56 w-full cursor-pointer items-center justify-center border border-[#dcdcdc] bg-white p-4"
       onClick={goNovelPage}
     >
-      <div className="flex h-36 w-full items-center justify-center">
-        <div className="aspect-square w-40 bg-[#F2F2F0]">
+      <div className="flex h-56 w-full items-center justify-center">
+        <div className="aspect-square w-56 bg-[#F2F2F0]">
           {story.thumbnail && (
             <img src={story.thumbnail.src} alt={story.thumbnail.name} className="h-full w-full object-cover" />
           )}
         </div>
-        <div className="h-full w-full p-2">
+        <div className="h-full w-full p-6">
           <h3 className="mb-4 text-3xl">{title}</h3>
-          {description && <p className="text-[14px]">{description}</p>}
+          <p className="mb-2 text-[13px]">
+            {chapters.length ? `총 ${chapters.length}화` : "아직 작성된 글이 없습니다."}
+          </p>
+          {description && <p className="text-[15px]">{description}</p>}
         </div>
       </div>
     </div>
@@ -49,9 +52,9 @@ export default function Home() {
         </Button>
       }
     >
-      <div className="relative mx-auto max-w-[1024px]">
+      <div className="relative mx-auto max-w-[1024px] bg-[#fefcfc]">
         <div className="my-6 flex w-full flex-col items-center justify-center gap-5 px-4">
-          <h2 className="flex flex-col items-center justify-center gap-2 py-5 text-2xl">
+          <h2 className="flex flex-col items-center justify-center gap-2 py-5 text-xl">
             <img src={bookImage.src} alt="" className="h-10 w-10" />
             작가님의 작품 목록
           </h2>
