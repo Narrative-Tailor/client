@@ -75,19 +75,21 @@ export default function EpisodeGenerator() {
         </Button>
         <ResetButton onClick={handleReset} />
       </div>
-      <section className="flex flex-col gap-4 px-2 pb-2">
-        <div className="flex w-full flex-col gap-2 p-1">
+      <section className="flex flex-col gap-8 px-2 pb-2">
+        <div className="flex w-full flex-col gap-4 p-1">
           {!folded && (
             <>
               <Input value={genre} onChange={onChangeGenre} label="장르" labelStyle="horizontal" />
-              <Input value={when} onChange={onChangeWhen} label="언제?" labelStyle="horizontal" />
-              <Input value={where} onChange={onChangeWhere} label="어디서?" labelStyle="horizontal" />
-              <Input value={who} onChange={onChangeWho} label="누구랑?" labelStyle="horizontal" />
-              <Input value={what} onChange={onChangeWhat} label="무엇을?" labelStyle="horizontal" />
-              <Input value={how} onChange={onChangeHow} label="어떻게?" labelStyle="horizontal" textareaMode />
-              <Input value={why} onChange={onChangeWhy} label="왜?" labelStyle="horizontal" textareaMode />
+              <Input value={when} onChange={onChangeWhen} label="언제" labelStyle="horizontal" />
+              <Input value={where} onChange={onChangeWhere} label="어디서" labelStyle="horizontal" />
+              <Input value={who} onChange={onChangeWho} label="누구랑" labelStyle="horizontal" />
+              <Input value={what} onChange={onChangeWhat} label="무엇을" labelStyle="horizontal" />
+              <Input value={how} onChange={onChangeHow} label="어떻게" labelStyle="horizontal" textareaMode />
+              <Input value={why} onChange={onChangeWhy} label="왜" labelStyle="horizontal" textareaMode />
             </>
           )}
+        </div>
+        <div className="flex w-full flex-col">
           {!generated && (
             <Button onClick={handleGenerate} disabled={isLoading}>
               생성하기
@@ -99,10 +101,15 @@ export default function EpisodeGenerator() {
           )}
         </div>
         {generated && (
-          <div className="h-fit w-full bg-white p-2">
-            {episode.map((sentence, idx) => (
-              <p key={`${idx + 1}`}>{sentence}</p>
-            ))}
+          <div className="flex h-fit w-full flex-col gap-4 bg-white">
+            <h4>에피소드</h4>
+            <div className="border border-[#E8E8E6] p-4 leading-8">
+              {episode.map((sentence, idx) => (
+                <p key={`${idx + 1}`} className="py-1">
+                  {sentence}
+                </p>
+              ))}
+            </div>
           </div>
         )}
       </section>

@@ -6,7 +6,7 @@ import useMount from "@hooks/useMount";
 // eslint-disable-next-line import/extensions
 import bookImage from "public/book.png";
 import useStoryStore, {Story} from "@/store/storyStore";
-import Button from "@/components/atoms/Button";
+import ChipButton from "@/components/atoms/Chip/ChipButton";
 
 function StoryItem({story}: {story: Story}) {
   const {id, title, description, chapters} = story;
@@ -18,21 +18,23 @@ function StoryItem({story}: {story: Story}) {
 
   return (
     <div
-      className="flex h-56 w-full cursor-pointer items-center justify-center border border-[#dcdcdc] bg-white p-4"
+      className="flex h-56 w-full cursor-pointer items-center justify-center border border-[#dcdcdc] bg-white p-8"
       onClick={goNovelPage}
     >
-      <div className="flex h-56 w-full items-center justify-center">
-        <div className="aspect-square w-56 bg-[#F2F2F0]">
+      <div className="flex h-full w-full items-center justify-center gap-8">
+        <div className="aspect-square h-full bg-[#F2F2F0]">
           {story.thumbnail && (
             <img src={story.thumbnail.src} alt={story.thumbnail.name} className="h-full w-full object-cover" />
           )}
         </div>
-        <div className="h-full w-full p-6">
-          <h3 className="mb-4 text-3xl">{title}</h3>
-          <p className="mb-2 text-[13px]">
+        <div className="flex h-full flex-1 flex-col gap-2">
+          <h3 className="mb-1 p-0 text-4xl">{title}</h3>
+          <p className="p-0 text-[13px]">
             {chapters.length ? `총 ${chapters.length}화` : "아직 작성된 글이 없습니다."}
           </p>
-          {description && <p className="text-[15px]">{description}</p>}
+          {description && (
+            <p className="flex-1 overflow-y-hidden text-ellipsis whitespace-nowrap p-0 text-[15px]">{description}</p>
+          )}
         </div>
       </div>
     </div>
@@ -47,15 +49,20 @@ export default function Home() {
   return (
     <Layout
       rightButtons={
-        <Button theme="none" onClick={openModal}>
-          작품 추가
-        </Button>
+        <div className="flex">
+          <ChipButton
+            isSelected={false}
+            label="작품 추가"
+            onClick={openModal}
+            className="rounded-full border border-[#E8E8E6] py-2 px-5"
+          />
+        </div>
       }
     >
       <div className="relative mx-auto max-w-[1024px] bg-[#fefcfc]">
         <div className="my-6 flex w-full flex-col items-center justify-center gap-5 px-4">
-          <h2 className="flex flex-col items-center justify-center gap-2 py-5 text-xl">
-            <img src={bookImage.src} alt="" className="h-10 w-10" />
+          <h2 className="flex flex-col items-center justify-center gap-2 py-5 text-lg">
+            <img src={bookImage.src} alt="" className="h-14 w-14" />
             작가님의 작품 목록
           </h2>
         </div>

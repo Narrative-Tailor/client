@@ -43,21 +43,24 @@ export default function ImageGenerator() {
         <h4 className="text-lg">그림 생성</h4>
         <ResetButton onClick={resetImage} />
       </div>
-      <div className="flex flex-col gap-2 px-2">
+      <div className="flex flex-col gap-8 px-2">
         <textarea
-          className="h-60 w-full rounded-[5px] p-1"
+          className="h-60 w-full resize-none"
           placeholder="생성하고 싶은 그림을 묘사해주세요!"
           value={value}
           onChange={onChangeValue}
         />
-        <Button onClick={generateImage} disabled={isLoading}>
-          그림 생성하기
-        </Button>
-        {isLoading && <p>그림을 생성중입니다.</p>}
-        {error && <p className="text-red-500">{error.message}</p>}
+        <div className="w-full">
+          <Button onClick={generateImage} disabled={isLoading} size="full">
+            그림 생성하기
+          </Button>
+          {isLoading && <p>그림을 생성중입니다.</p>}
+          {error && <p className="text-red-500">{error.message}</p>}
+        </div>
       </div>
       {!isLoading && image && (
         <div className="flex flex-col gap-4 px-2">
+          <h4>생성된 이미지</h4>
           <img className="aspect-auto w-full" src={image} alt="묘사 이미지" />
         </div>
       )}

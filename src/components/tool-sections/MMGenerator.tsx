@@ -50,32 +50,37 @@ export default function MMGenerator() {
         <h4 className="text-lg">연상 단어 생성</h4>
         <ResetButton onClick={handleReset} />
       </div>
-      <div className="flex flex-col gap-4 px-2">
-        <Input value={topic} onChange={onChangeTopic} label="Topic" />
+      <div className="flex flex-col gap-8 px-2">
+        <Input value={topic} onChange={onChangeTopic} label="주제" />
         <Input value={genre} onChange={onChangeGenre} label="장르" />
 
+        {mm === null && (
+          <div className="flex flex-col">
+            <Button onClick={generateMM} disabled={isLoading} size="full">
+              생성하기
+            </Button>
+            {isLoading && <p>연상 단어를 생성중입니다.</p>}
+            {error && <p className="text-red-500">에러가 발생했습니다.</p>}
+          </div>
+        )}
         {mm !== null && mm.length > 0 && (
-          <div className="mt-2 flex w-full flex-wrap items-center justify-start gap-2">
-            {mm.map((word, idx) => (
-              <ChipButton
-                key={`${word}-${idx + 1}`}
-                disabled
-                label={word}
-                isSelected={false}
-                onClick={() => {}}
-                className="h-10 min-w-[calc(33%-5px)] break-words text-[14px] text-gray-800"
-              />
-            ))}
+          <div className="mt-4 flex w-full flex-col gap-4">
+            <h4 className="text-lg">연상어</h4>
+            <div className="flex w-full flex-wrap items-center justify-start gap-2">
+              {mm.map((word, idx) => (
+                <ChipButton
+                  key={`${word}-${idx + 1}`}
+                  disabled
+                  label={word}
+                  isSelected={false}
+                  onClick={() => {}}
+                  className="h-10 min-w-[calc(33%-5px)] break-words border border-[#E8E8E6] text-[14px] text-black"
+                />
+              ))}
+            </div>
           </div>
         )}
         {mm !== null && mm.length === 0 && <p>생성된 단어가 없습니다.</p>}
-        {mm === null && (
-          <Button onClick={generateMM} disabled={isLoading}>
-            생성하기
-          </Button>
-        )}
-        {isLoading && <p>연상 단어를 생성중입니다.</p>}
-        {error && <p className="text-red-500">에러가 발생했습니다.</p>}
       </div>
     </div>
   );

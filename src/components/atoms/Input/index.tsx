@@ -16,19 +16,24 @@ export default function Input({value, onChange, label, labelStyle = "vertical", 
   return (
     <div className={containerStyle}>
       {label && (
-        <label htmlFor={`${label}-input`} className="mr-2 min-w-[72px] text-[16px]">
+        <label htmlFor={`${label}-input`} className="mr-2 mb-2 min-w-[72px] text-[16px]">
           {label}
         </label>
       )}
       {textareaMode ? (
         <textarea
           id={`${label}-input`}
-          className="h-32 w-full resize-none rounded-[5px] p-1"
+          className="h-44 w-full resize-none p-2 px-4"
           value={value}
           onChange={onChange}
         />
       ) : (
-        <input id={`${label}-input`} className="w-full rounded-[5px] p-1" value={value} onChange={onChange} />
+        <input
+          id={`${label}-input`}
+          className="w-full rounded-[5px] p-2 px-4 text-[15px]"
+          value={value}
+          onChange={onChange}
+        />
       )}
     </div>
   );

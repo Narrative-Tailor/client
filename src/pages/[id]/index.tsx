@@ -98,10 +98,10 @@ export default function Editor() {
     <div className="h-screen">
       <div className="flex h-full w-full">
         <div
-          className="relative flex flex-col bg-[#F2F2F0] transition-all"
+          className="relative flex flex-col bg-[#fefcfc] transition-all"
           style={{
-            width: menuOpened ? "25vw" : "48px",
-            minWidth: menuOpened ? "280px" : "90px",
+            width: menuOpened ? "25vw" : "120px",
+            minWidth: menuOpened ? "280px" : "120px",
             boxShadow: "2px 4px 7px -1px rgb(0 0 0 / 10%), 0 2px 4px -2px rgb(0 0 0 / 10%)",
           }}
         >
@@ -119,7 +119,7 @@ export default function Editor() {
           <div className="flex h-12 w-full justify-center gap-2 border-t border-[#E8E8E6]">
             <Link
               href={`/${currentStory?.id}/settings`}
-              className="flex h-full w-full items-center justify-center gap-2 px-4"
+              className="flex h-full w-full items-center justify-center gap-2 px-6"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -136,35 +136,35 @@ export default function Editor() {
                 />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              {menuOpened && <span className="ml-2 flex-1">작품관리</span>}
+              {menuOpened && <span className="ml-2 flex-1 whitespace-nowrap">작품관리</span>}
             </Link>
           </div>
         </div>
-        <div className="flex h-full w-full min-w-0 max-w-[100%] transition-all">
+        <div className="flex h-full w-full min-w-0 max-w-[100%] pt-10 transition-all">
           <div className="flex-1" />
           <div className="h-full w-full flex-[7.6] py-10">
-            <h3 className="title px-4 pt-2 text-[20px] leading-6">{currentStory?.title}</h3>
             <div className="flex h-[calc(100%-50px)] w-full flex-1 flex-col">
+              <h3 className="px-4 pt-2 pb-0 text-[20px] leading-6">{currentStory?.title}</h3>
               {query?.chapter && (
                 <div className="flex h-full w-full max-w-full flex-col items-start text-[16px] leading-[1.5]">
-                  <div className="flex w-full  items-center border-b border-[#E8E8E6] py-5">
+                  <div className="flex w-full items-center border-b border-[#E8E8E6]">
                     <input
                       type="text"
                       placeholder="회차 제목을 입력하세요."
-                      className="h-full w-full px-4 text-3xl  outline-none"
+                      className="h-full w-full px-4 text-5xl outline-none"
                       value={title}
                       onChange={onChangeTitle}
+                      onBlur={handleSaveContent}
                     />
                   </div>
                   <textarea
-                    className="h-full w-full resize-none p-3 text-lg outline-none"
+                    className="h-full w-full resize-none py-6 text-lg leading-9 outline-none"
+                    style={{letterSpacing: 0.8, wordSpacing: 1.8}}
                     name="novel-content"
                     placeholder="챕터 내용을 입력하세요."
                     value={content}
                     onChange={onChangeContent}
-                    onBlur={() => {
-                      handleSaveContent();
-                    }}
+                    onBlur={handleSaveContent}
                   />
                 </div>
               )}
@@ -173,10 +173,10 @@ export default function Editor() {
           <div className="flex-1" />
         </div>
         <div
-          className="flex min-h-[496px] w-[40vw] min-w-[400px] flex-col bg-white transition-transform"
+          className="flex min-h-[496px] w-[48vw] min-w-[400px] flex-col bg-[#fefcfc] transition-transform"
           style={{boxShadow: "rgb(0 0 0 / 10%) -2px 4px 7px -1px, rgb(0 0 0 / 10%) -2px 0px 4px -2px"}}
         >
-          <div className="flex w-full items-center justify-center">
+          <div className="my-6 flex w-full items-center justify-center px-2">
             <ChipButtonList>
               {CHIPS.map((chip) => (
                 <button
@@ -203,7 +203,7 @@ export default function Editor() {
               ))}
             </ChipButtonList>
           </div>
-          <section className="w-full overflow-auto">
+          <section className="w-full overflow-auto border-t border-[#E8E8E6] py-4 px-8">
             {selectedChip?.label === "맥락" && <ContextGenerator />}
             {selectedChip?.label === "문체" && (
               <TextStyleGenerator textStyles={textStyles} loading={textStyleLoading} />

@@ -1,10 +1,12 @@
 type Props = {
+  title: string;
   onClickAddChapter: () => void;
 };
-export default function Toolbar({onClickAddChapter}: Props) {
+export default function Toolbar({title, onClickAddChapter}: Props) {
   return (
-    <div className="flex h-10 w-full items-center justify-end p-1">
-      <div className="flex h-full items-center gap-2">
+    <div className="mt-4 mb-1 flex h-12 w-full items-center justify-end ">
+      <div className="ml-8 mr-5 flex h-full w-full items-center justify-between gap-2">
+        <h4 className="text-xl">{title}</h4>
         <button aria-label="추가" onClick={onClickAddChapter}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

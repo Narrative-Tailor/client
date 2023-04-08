@@ -66,10 +66,10 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
 
   return (
     <div className="h-full w-full">
-      <div className="flex w-full items-center justify-between  py-2 ">
-        <Link href="/" className="flex h-full items-center justify-center gap-2 whitespace-nowrap px-2 text-xl">
+      <div className="flex w-full items-center justify-between border-b border-[#E8E8E6] p-2 px-4">
+        <Link href="/" className="flex h-full items-center justify-center gap-2 px-3 text-xl">
           <img src={logoImage.src} alt="로고" className="h-9 w-9" />
-          {menuOpened ? "Narrative Tailor" : ""}
+          <span className="whitespace-nowrap transition-all">{menuOpened ? "Narrative Tailor" : ""}</span>
         </Link>
         <button onClick={handleMenu} className="h-7 w-7">
           {menuOpened ? (
@@ -79,7 +79,7 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-7 w-7"
+              className="h-6 w-5"
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
@@ -90,29 +90,28 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-7 w-7"
+              className="h-6 w-5"
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
           )}
         </button>
       </div>
-      {menuOpened && <Toolbar onClickAddChapter={handleClickAdd} />}
+      {menuOpened && <Toolbar title={currentStory?.title ?? ""} onClickAddChapter={handleClickAdd} />}
       {menuOpened && (
-        <div className="flex-1 ">
+        <div className="flex-1">
           <ul className="h-full w-full">
             {chapters?.map((chapter, index) => (
               <li
-                className="group flex cursor-pointer items-center justify-between px-2 py-1 transition-opacity hover:bg-gray-200"
+                className="group flex cursor-pointer items-center justify-between px-4 py-1 transition-opacity hover:bg-[#eaeaea]"
                 key={chapter.id}
                 onClick={() => onClickChapter(chapter.id)}
                 style={{
-                  background: chapterId && parseInt(chapterId, 10) === chapter.id ? "#585856" : "",
-                  color: chapterId && parseInt(chapterId, 10) === chapter.id ? "white" : "black",
+                  textDecoration: chapterId && parseInt(chapterId, 10) === chapter.id ? "underline" : "",
                   opacity: menuOpened ? 0.99 : 0,
                 }}
               >
-                <span className="flex-1 py-1 text-[14px]">
+                <span className="flex-1 whitespace-nowrap px-4 py-1 text-[15px]">
                   {index + 1}화. {chapter.title}
                 </span>
 

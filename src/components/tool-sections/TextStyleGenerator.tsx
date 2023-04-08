@@ -60,7 +60,7 @@ export default function TextStyleGenerator({textStyles, loading}: {textStyles: T
         <ResetButton onClick={resetTransformedText} />
       </div>
       {!loading && (
-        <section className="flex flex-col gap-4 px-2">
+        <section className="flex flex-col gap-10 px-2">
           <select
             className="rounded-[5px] border border-[#E8E8E6] p-2 text-[14px]"
             value={selectedOption?.value}
@@ -72,22 +72,23 @@ export default function TextStyleGenerator({textStyles, loading}: {textStyles: T
               </option>
             ))}
           </select>
-          <div className="flex flex-col gap-2">
-            <textarea
-              className="h-52 resize-none overflow-auto rounded-[5px] p-1"
-              value={textStyleValue}
-              onChange={onChangeTextStyleValue}
-            />
-
-            {transformedText.length === 0 && <Button onClick={handleTransformTextStyle}>변환하기</Button>}
+          <div className="flex w-full flex-col">
+            <textarea className="h-52 resize-none" value={textStyleValue} onChange={onChangeTextStyleValue} />
+          </div>
+          <div className="w-full">
+            {transformedText.length === 0 && (
+              <Button onClick={handleTransformTextStyle} disabled={isLoading} size="full">
+                변환하기
+              </Button>
+            )}
             {isLoading && <p>문체를 변환중입니다.</p>}
             {error && <p className="text-red-500">문체 변환중 에러가 발생하였습니다.</p>}
             {transformedText.length > 0 && (
               <div className="flex h-auto min-h-[200px] flex-col overflow-auto">
                 <h4 className="mb-4">문체 변환 결과</h4>
-                <div className=" flex-1 bg-white px-2 py-1">
+                <div className="flex flex-1 flex-col gap-4 rounded-[5px] py-1">
                   {transformedText.map((text) => (
-                    <p>{text}</p>
+                    <p className="border border-[#E8E8E6] bg-white">{text}</p>
                   ))}
                 </div>
               </div>
