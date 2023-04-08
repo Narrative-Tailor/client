@@ -1,7 +1,7 @@
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 
-import NovelLayout from "@components/layouts/NovelLayout";
+// import NovelLayout from "@components/layouts/NovelLayout";
 
 import {useAutoSave, useInput, useTextStyle} from "@hooks/index";
 import ChapterList from "@/components/editor/ChapterList";
@@ -75,11 +75,11 @@ export default function Editor() {
   const [toolbarOpened, setToolbarOpened] = useState(true);
 
   return (
-    <NovelLayout id={id}>
+    <div className="h-screen">
       <div className="flex h-full w-full">
         <div
-          className="flex w-[280px] flex-col bg-[#F2F2F0] transition-all"
-          style={{width: menuOpened ? "280px" : "32px"}}
+          className="relative flex  flex-col bg-[#F2F2F0] transition-all"
+          style={{width: menuOpened ? "25vw" : "32px", minWidth: menuOpened ? "280px" : "90px"}}
         >
           <ChapterList
             id={id}
@@ -123,10 +123,7 @@ export default function Editor() {
           </div>
           <div className="flex-1" />
         </div>
-        <div
-          className="flex min-h-[496px] w-[36vw] min-w-[360px] flex-col bg-[#F2F2F0] transition-transform"
-          // style={{transform: toolbarOpened ? "translateX(0)" : "translateX(calc(100% - 48px))"}}
-        >
+        <div className="flex min-h-[496px] w-[36vw] min-w-[360px] flex-col bg-[#F2F2F0] transition-transform">
           <div className="flex w-full items-center justify-center p-2">
             <ChipButtonList>
               {CHIPS.map((chip) => (
@@ -152,6 +149,6 @@ export default function Editor() {
           </section>
         </div>
       </div>
-    </NovelLayout>
+    </div>
   );
 }
