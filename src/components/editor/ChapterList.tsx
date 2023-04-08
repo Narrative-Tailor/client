@@ -24,9 +24,12 @@ const useToolbar = (storyId: number) => {
 
 type ChapterListProps = {
   id: string;
+  chapterId: string;
+  menuOpened: boolean;
   onClickChapter: (id: number) => void;
+  handleMenu: () => void;
 };
-export default function ChapterList({id, onClickChapter}: ChapterListProps) {
+export default function ChapterList({id, chapterId, menuOpened, onClickChapter, handleMenu}: ChapterListProps) {
   const {currentStory, handleAddChapter: addChapter, handleDeleteChapter: deleteChapter} = useToolbar(parseInt(id, 10));
   const chapters = currentStory?.chapters;
 
@@ -48,6 +51,7 @@ export default function ChapterList({id, onClickChapter}: ChapterListProps) {
     setChapterTitle("");
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const handleDeleteChapter = (chapterId: number) => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const chapter = currentStory?.chapters.find(({id}) => id === chapterId);
@@ -59,16 +63,20 @@ export default function ChapterList({id, onClickChapter}: ChapterListProps) {
 
   return (
     <div className="h-full w-full">
-      <Toolbar onClickAddChapter={handleClickAdd} />
-      <div className="flex-1 px-1">
+      <Toolbar onClickAddChapter={handleClickAdd} onClickToggleMenu={handleMenu} menuOpened={menuOpened} />
+      <div className="flex-1 ">
         <ul className="h-full w-full">
           {chapters?.map((chapter, index) => (
             <li
-              className="group flex cursor-pointer justify-between hover:bg-gray-400"
+              className="group flex cursor-pointer items-center justify-between px-2 py-1 hover:bg-gray-200"
               key={chapter.id}
               onClick={() => onClickChapter(chapter.id)}
+              style={{
+                background: parseInt(chapterId, 10) === chapter.id ? "#585856" : "",
+                color: parseInt(chapterId, 10) === chapter.id ? "white" : "black",
+              }}
             >
-              <span className="flex-1">
+              <span className="flex-1 py-1">
                 {index + 1}화. {chapter.title}
               </span>
 
@@ -100,7 +108,7 @@ export default function ChapterList({id, onClickChapter}: ChapterListProps) {
         {isAdding && (
           <input
             ref={chapterTitleRef}
-            className="outline outline-black"
+            className="w-full px-2 py-1 outline outline-black"
             value={chapterTitle}
             onChange={onChangeChapterTitle}
             onBlur={() => {

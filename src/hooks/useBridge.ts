@@ -1,9 +1,11 @@
 import {useState} from "react";
+import {AxiosError} from "axios";
 import useInput from "./useInput";
 import {getContext} from "@/api/getContext";
 
 const useBridge = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<AxiosError | null>(null);
   const [bridgeParagraph, setBridgeParagraph] = useState("");
 
   const {value: preParagraph, onChangeValue: onChangePreParagraph, setValue: setPre} = useInput();
@@ -23,13 +25,19 @@ const useBridge = () => {
       return;
     }
     setIsLoading(true);
-    const {result} = await getContext({pre: trimedPre, post: trimedPost});
-    setIsLoading(false);
-    setBridgeParagraph(result);
+    try {
+      const {result} = await getContext({pre: trimedPre, post: trimedPost});
+      setBridgeParagraph(result);
+    } catch (err) {
+      setError(err as AxiosError);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return {
     isLoading,
+    error,
     bridgeParagraph,
     preParagraph,
     postParagraph,

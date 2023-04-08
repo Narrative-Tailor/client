@@ -1,59 +1,38 @@
 import {ReactNode} from "react";
 import Link from "next/link";
-import {useRouter} from "next/router";
 
-type NavMenu = {
-  href: string;
-  pathname: string;
-  title: string | ReactNode;
-};
+// type NavMenu = {
+//   href: string;
+//   pathname: string;
+//   title: string | ReactNode;
+// };
 
 type NovelLayoutProps = {
   children: ReactNode;
   id: string;
 };
-export default function NovelLayout({children, id}: NovelLayoutProps) {
-  const router = useRouter();
-  const currentPath = router.pathname;
+export default function NovelLayout({children}: NovelLayoutProps) {
+  // const [width, setWidth] = useState(window?.innerWidth);
 
-  const menus: NavMenu[] = [
-    {
-      href: "/",
-      pathname: "/",
-      title: "내 서재",
-    },
-    {
-      href: `/${id}`,
-      pathname: "/[id]",
-      title: "에디터",
-    },
-    {
-      href: `/${id}/mind-map`,
-      pathname: "/[id]/mind-map",
-      title: "마인드맵",
-    },
-  ];
-
+  // useEffect(() => {}, []);
   return (
-    <div className="flex h-full w-full">
-      <nav className="h-screen w-20 bg-yellow-300">
-        {menus.map(({href, title, pathname}) => (
-          <li
-            key={`link-${href}-${title}`}
-            className="flex h-12 w-full items-center justify-center hover:bg-yellow-200"
-          >
-            <Link
-              href={href}
-              className={"flex h-full w-full items-center justify-center px-2".concat(
-                currentPath === pathname ? " bg-yellow-200" : "",
-              )}
-            >
-              {title}
-            </Link>
-          </li>
-        ))}
-      </nav>
-      <main className="flex-1">{children}</main>
+    <div className="relative h-screen overflow-hidden bg-transparent">
+      <div className="flex w-full flex-col overflow-hidden">
+        <nav className="z-10 max-w-full select-none bg-white">
+          <div className="relative h-[45px] w-full max-w-[100vw] opacity-100 transition-opacity">
+            <div className="flex h-[45px] items-center justify-between overflow-hidden pl-[12px] pr-[10px]">
+              <Link href="/" className="flex h-full items-center justify-center px-4 text-xl">
+                Narrative Tailor
+              </Link>
+            </div>
+          </div>
+        </nav>
+        <main className="relative z-[1] flex h-[calc(100vh-45px)] max-h-[100%] w-full shrink grow-0 flex-col bg-white">
+          <div className="relative z-[1] mr-0 mb-0 flex grow flex-col items-center overflow-y-auto overflow-x-hidden">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

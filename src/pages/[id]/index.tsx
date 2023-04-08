@@ -1,64 +1,37 @@
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 
-import Button from "@components/atoms/Button";
 import NovelLayout from "@components/layouts/NovelLayout";
 
-import {useAutoSave, useTabs, useInput, useBridge, useOptions, useTextStyle} from "@hooks/index";
-import axios, {AxiosError} from "axios";
-import {Typo} from "hanspell";
+import {useAutoSave, useInput} from "@hooks/index";
 import ChapterList from "@/components/editor/ChapterList";
 import useStoryStore from "@/store/storyStore";
+import ChipButtonList, {ChipListItem, useChipList} from "@/components/atoms/Chip/ChipList";
+import ChipButton from "@/components/atoms/Chip/ChipButton";
+import ContextGenerator from "@/components/tool-sections/ContextGenerator";
+import TextStyleGenerator from "@/components/tool-sections/TextStyleGenerator";
+import ImageGenerator from "@/components/tool-sections/ImageGenerator";
+import MMGenerator from "@/components/tool-sections/MMGenerator";
+import EpisodeGenerator from "@/components/tool-sections/EpisodeGenerator";
+import Button from "@/components/atoms/Button";
 
 const AUTOSAVE_INTERVAL_MS = 30000;
 
-const TABS = ["맥락", "문체", "맞춤법"];
-
-const useTextStyleOptions = () => {
-  const {data: textStyles} = useTextStyle();
-  const options = textStyles
-    .filter((textStyle) => textStyle.isAvailable)
-    .map((textStyle) => ({label: textStyle.value, value: textStyle.value}));
-
-  const defaultOptions = options.length > 0 ? options[0] : undefined;
-
-  const {options: textStyleOptions, handleChangeOption, selectedOption} = useOptions(options, defaultOptions);
-
-  return {
-    options: textStyleOptions,
-    selectedOption,
-    handleChangeOption,
-  };
-};
+const TABS = ["맥락", "문체", "그림", "MM", "에피소드"];
+const CHIPS: ChipListItem[] = TABS.map((tab, idx) => ({id: idx + 1, label: tab}));
 
 export default function Editor() {
   const {stories, saveChapter} = useStoryStore();
   const router = useRouter();
   const query = router.query as unknown as {id: string; chapter?: string};
-  const {id} = query;
+  const {id, chapter} = query;
 
   const currentStory = stories.find(({id: storyId}) => storyId === parseInt(id, 10));
 
-  const {currentTab, handleClickTab} = useTabs(TABS);
-  const {
-    isLoading: bridgeLoading,
-    bridgeParagraph,
-    preParagraph,
-    postParagraph,
-    onChangePostParagraph,
-    onChangePreParagraph,
-    handleBridgeParagraph,
-    resetBridge,
-  } = useBridge();
-
-  const {options: textStyleOptions, handleChangeOption, selectedOption} = useTextStyleOptions();
+  const {selectedChip, handleClickChip} = useChipList(CHIPS);
 
   const {value: title, onChangeValue: onChangeTitle, setValue: setTitle} = useInput();
   const {value: content, onChangeValue: onChangeContent, setValue: setContent} = useInput();
-  const {value: sentenceToCheck, onChangeValue: onChangeSentenceToCheck} = useInput();
-  const [checkedResult, setCheckedResult] = useState<Typo[] | null>(null);
-  const [checkedSentence, setCheckedSentence] = useState("");
-  const [showCheckedResult, setShowCheckedResult] = useState(false);
 
   // const startAutoSave = false && title.length > 0 || content.length > 0;
   const startAutoSave = false;
@@ -69,25 +42,6 @@ export default function Editor() {
   };
   useAutoSave(handleSaveContent, AUTOSAVE_INTERVAL_MS, startAutoSave);
 
-  const {value: textStyleValue, onChangeValue: onChangeTextStyleValue} = useInput();
-  const [transformedText, setTransformedText] = useState("");
-
-  const handleTransformTextStyle = () => {
-    switch (selectedOption?.value) {
-      case "사극체":
-        setTransformedText("어쩌시겠습니까?");
-        break;
-      case "잼민이체":
-        setTransformedText("어쩔티비~");
-        break;
-      default:
-        break;
-    }
-  };
-  const resetTransformedText = () => {
-    setTransformedText("");
-  };
-
   const handleClickChapter = (chapterId: number) => {
     router.replace(`/${currentStory?.id}?chapter=${chapterId}`);
   };
@@ -96,6 +50,9 @@ export default function Editor() {
     if (!query?.chapter) {
       setTitle("");
       setContent("");
+      if (currentStory?.chapters.length && currentStory?.chapters.length > 0) {
+        router.push(`/${currentStory?.id}?chapter=${currentStory?.chapters[0].id}`);
+      }
       return;
     }
     const chapterId = parseInt(query.chapter, 10);
@@ -113,218 +70,83 @@ export default function Editor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query?.chapter]);
 
+  const [menuOpened, setMenuOpened] = useState(true);
+  const [toolbarOpened, setToolbarOpened] = useState(true);
+
   return (
     <NovelLayout id={id}>
-      <main className="flex h-full flex-1 flex-col">
-        <header className="flex h-20 w-full items-center border-b border-black bg-green-100">
-          <h2>Here, book id : {id}</h2>
-        </header>
-        <div className="flex h-full w-full flex-1">
-          <div className="flex h-full w-48 flex-col border-r border-black bg-gray-200">
-            <ChapterList id={id} onClickChapter={handleClickChapter} />
-          </div>
-          <div className="flex flex-1">
-            <div className="flex flex-1 flex-col border-b border-r border-black">
-              {query?.chapter && (
-                <>
-                  <div className="flex h-14 w-full items-center">
-                    <input
-                      type="text"
-                      placeholder="회차 제목을 입력하세요."
-                      className="h-full w-full px-2 text-lg outline outline-black"
-                      value={title}
-                      onChange={onChangeTitle}
-                    />
-                  </div>
-                  <section className="flex flex-1">
-                    <div className="flex flex-1">
-                      <textarea
-                        name="novel-content"
-                        placeholder="챕터 내용을 입력하세요."
-                        className="flex-1 p-2"
-                        value={content}
-                        onChange={onChangeContent}
-                        onBlur={() => {
-                          handleSaveContent();
-                        }}
-                      />
-                    </div>
-                    {/* 문맥 추천 section */}
-                  </section>
-                </>
-              )}
-            </div>
-            <div className="flex h-full w-96 flex-col border-b border-black">
-              <div className="flex h-16 items-center justify-center gap-2 border-b border-black">
-                {TABS.map((tab, index) => (
-                  <Button
-                    key={`${tab}-${index + 1}`}
-                    onClick={() => handleClickTab(tab)}
-                    theme={currentTab === tab ? "primary" : "secondary"}
-                  >
-                    {tab}
-                  </Button>
-                ))}
-              </div>
-              <section className="h-full w-full border-l">
-                {currentTab === "맥락" && (
-                  <div className="flex h-full w-full flex-col gap-2 overflow-y-auto px-2">
-                    <div className="flex items-center justify-end">
-                      <button type="button" onClick={resetBridge}>
-                        초기화
-                      </button>
-                    </div>
-                    <div className="flex w-full flex-col items-center">
-                      <h4 className="mb-2 w-full">pre</h4>
-                      <textarea
-                        name="pre-p"
-                        className="h-36 w-full p-1"
-                        value={preParagraph}
-                        onChange={onChangePreParagraph}
-                      />
-                    </div>
-                    {/* eslint-disable-next-line no-nested-ternary */}
-                    {bridgeLoading ? (
-                      <div className="h-40 w-full overflow-y-auto border border-black p-1">문맥을 생성중입니다...</div>
-                    ) : bridgeParagraph ? (
-                      <div className="h-40 w-full overflow-y-auto border border-black p-1">
-                        <p>{bridgeParagraph}</p>
-                      </div>
-                    ) : (
-                      <Button onClick={handleBridgeParagraph}>
-                        <span className="text-2xl font-medium">+</span>
-                      </Button>
-                    )}
-                    <div className="flex w-full flex-col items-center">
-                      <h4 className="mb-2 w-full">post</h4>
-                      <textarea
-                        name="post-p"
-                        className="h-36 w-full p-1"
-                        value={postParagraph}
-                        onChange={onChangePostParagraph}
-                      />
-                    </div>
-                  </div>
-                )}
-                {currentTab === "문체" && (
-                  <div className="flex h-full w-full flex-col gap-2 overflow-y-auto px-2">
-                    <div className="mb-2 flex items-center justify-between">
-                      <h4>Option</h4>
-                      <button type="button" onClick={resetTransformedText}>
-                        새로고침
-                      </button>
-                    </div>
-                    <select
-                      className="py-1 outline outline-1 outline-black"
-                      value={selectedOption?.value}
-                      onChange={handleChangeOption}
-                    >
-                      {textStyleOptions.map((option) => (
-                        <option key={option.label} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="flex flex-col gap-2">
-                      <textarea
-                        className="h-44 overflow-auto p-1"
-                        value={textStyleValue}
-                        onChange={onChangeTextStyleValue}
-                      />
-
-                      <Button onClick={handleTransformTextStyle}>Transform</Button>
-                      {transformedText && (
-                        <div className="h-44 overflow-auto border border-black p-1">
-                          <p>{transformedText}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-                {currentTab === "맞춤법" && (
-                  <div className="flex h-full w-full flex-col gap-2 overflow-y-auto px-2">
-                    <div className="flex items-center justify-end">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setCheckedResult(null);
-                          setCheckedSentence("");
-                          setShowCheckedResult(false);
-                        }}
-                      >
-                        초기화
-                      </button>
-                    </div>
-                    <div className="flex w-full flex-col items-center">
-                      <h4 className="mb-2 w-full">검사할 문장</h4>
-                      <textarea
-                        name="check-sentence"
-                        className="h-36 w-full p-1"
-                        value={sentenceToCheck}
-                        onChange={onChangeSentenceToCheck}
-                      />
-                    </div>
-                    {checkedResult === null ? (
-                      <Button
-                        onClick={async () => {
-                          try {
-                            const {data} = await axios.post<Typo[]>("/api/spell-check", {sentence: sentenceToCheck});
-                            console.log(data);
-                            setCheckedResult(data);
-                            setCheckedSentence(sentenceToCheck);
-                          } catch (error: unknown) {
-                            console.error(error as AxiosError);
-                          }
-                        }}
-                      >
-                        맞춤법 검사
-                      </Button>
-                    ) : (
-                      <div className="flex w-full flex-col items-center">
-                        <h4 className="mb-1 w-full">검사 결과</h4>
-                        <ul>
-                          {checkedResult.map((result) => (
-                            <li className="mb-4 flex flex-col gap-1" key={result.token}>
-                              <p>
-                                검사한 단어 : <span className="text-[16px] font-semibold">{result.token}</span>
-                              </p>
-                              <div className="flex">
-                                <span className="mr-2 text-[14px] font-semibold">제안 단어 :</span>
-                                {result.suggestions.map((suggestion, index) => (
-                                  <>
-                                    <span
-                                      className="cursor-pointer text-[14px] text-blue-500 hover:text-blue-700"
-                                      onClick={() => {
-                                        if (!showCheckedResult) {
-                                          setShowCheckedResult(true);
-                                        }
-                                        setCheckedSentence((prevSentence) => {
-                                          return prevSentence.replaceAll(result.token, suggestion);
-                                        });
-                                      }}
-                                    >
-                                      {suggestion}
-                                    </span>
-                                    <span className="mr-1 text-[14px]">
-                                      {index === result.suggestions.length - 1 ? "" : ","}
-                                    </span>
-                                  </>
-                                ))}
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {showCheckedResult && <textarea disabled value={checkedSentence} />}
-                  </div>
-                )}
-              </section>
-            </div>
-          </div>
-          <div />
+      <div className="h-full w-full">
+        <div
+          className="fixed left-0 bottom-0 top-[45px] flex w-[240px] flex-col bg-[#F2F2F0] transition-transform"
+          style={{
+            transform: menuOpened ? "translateX(0)" : "translateX(calc(-100% + 32px))",
+          }}
+        >
+          <ChapterList
+            id={id}
+            chapterId={chapter}
+            menuOpened={menuOpened}
+            onClickChapter={handleClickChapter}
+            handleMenu={() => {
+              setMenuOpened((prev) => !prev);
+            }}
+          />
         </div>
-      </main>
+        <div className="mx-auto ml-[320px] h-full w-[900px] min-w-0 max-w-[100%]">
+          <h3 className="px-2 pt-2 text-[20px] font-semibold">{currentStory?.title}</h3>
+          <div className="flex h-[calc(100%-50px)] w-full flex-1 flex-col">
+            {query?.chapter && (
+              <div className="flex h-full w-full max-w-full flex-col items-start text-[16px] leading-[1.5]">
+                <div className="flex h-14 w-full items-center border-b border-gray-100">
+                  <input
+                    type="text"
+                    placeholder="회차 제목을 입력하세요."
+                    className="h-full w-full px-2 text-3xl  outline-none"
+                    value={title}
+                    onChange={onChangeTitle}
+                  />
+                </div>
+                <textarea
+                  className="h-full w-full max-w-[900px] resize-none p-2 text-lg outline-none"
+                  name="novel-content"
+                  placeholder="챕터 내용을 입력하세요."
+                  value={content}
+                  onChange={onChangeContent}
+                  onBlur={() => {
+                    handleSaveContent();
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+        <div
+          className="fixed top-[45px] bottom-0 right-0 flex min-h-[496px] w-[580px] flex-col bg-[#F2F2F0] transition-transform"
+          style={{transform: toolbarOpened ? "translateX(0)" : "translateX(calc(100% - 48px))"}}
+        >
+          <div className="flex w-full items-center justify-center p-2">
+            <ChipButtonList>
+              {CHIPS.map((chip) => (
+                <ChipButton
+                  key={`${chip} ${chip.id}`}
+                  className="h-10 flex-1"
+                  isSelected={selectedChip?.id === chip.id}
+                  label={chip.label}
+                  onClick={() => handleClickChip(chip.id)}
+                  {...chip.props}
+                />
+              ))}
+            </ChipButtonList>
+          </div>
+          <section className="w-full overflow-auto">
+            {selectedChip?.label === "맥락" && <ContextGenerator />}
+            {selectedChip?.label === "문체" && <TextStyleGenerator />}
+            {selectedChip?.label === "그림" && <ImageGenerator />}
+            {selectedChip?.label === "MM" && <MMGenerator />}
+            {selectedChip?.label === "에피소드" && <EpisodeGenerator />}
+          </section>
+        </div>
+      </div>
     </NovelLayout>
   );
 }
