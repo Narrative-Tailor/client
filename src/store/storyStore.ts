@@ -104,7 +104,7 @@ const useStoryStore = create<StoryState>()(
         deleteStory: (id) => {
           set((state) => {
             const toDeleteStoryIdx = state.stories.findIndex((story) => story.id === id);
-            if (!toDeleteStoryIdx) return {...state};
+            if (toDeleteStoryIdx === -1) return {...state};
 
             state.stories.splice(toDeleteStoryIdx, 1);
 
