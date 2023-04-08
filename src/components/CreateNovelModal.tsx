@@ -55,10 +55,10 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "#ffffe7",
+    background: "white",
     overflow: "auto",
     WebkitOverflowScrolling: "touch",
-    borderRadius: "14px",
+    borderRadius: "5px",
     outline: "none",
     zIndex: 10,
     position: "unset",
@@ -159,8 +159,8 @@ export default function CreateNovel({isOpen, onCancel, onConfirm}: Props) {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center space-x-3">
-          <Button onClick={onCancel} theme="secondary">
+        <div className="flex items-center justify-center gap-10">
+          <Button onClick={onCancel} theme="none">
             취소
           </Button>
           <Button onClick={handleConfirm}>확인</Button>
