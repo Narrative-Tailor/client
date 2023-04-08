@@ -75,7 +75,7 @@ export default function EpisodeGenerator() {
         </Button>
         <ResetButton onClick={handleReset} />
       </div>
-      <section className="flex flex-col gap-4 px-2">
+      <section className="flex flex-col gap-4 px-2 pb-2">
         <div className="flex w-full flex-col gap-2 p-1">
           {!folded && (
             <>
@@ -95,7 +95,7 @@ export default function EpisodeGenerator() {
           )}
         </div>
         {generated && (
-          <div className="h-fit w-full bg-white py-4">
+          <div className="h-fit w-full bg-white p-2">
             {episode.map((sentence, idx) => (
               <p key={`${idx + 1}`}>{sentence}</p>
             ))}

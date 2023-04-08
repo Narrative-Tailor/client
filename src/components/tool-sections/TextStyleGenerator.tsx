@@ -1,5 +1,6 @@
 import Button from "@components/atoms/Button";
 import {useState} from "react";
+import {AxiosError} from "axios";
 import {useInput, useOptions, useTextStyle} from "@/hooks";
 import ResetButton from "./ResetButton";
 
@@ -25,17 +26,25 @@ export default function TextStyleGenerator() {
 
   const {value: textStyleValue, onChangeValue: onChangeTextStyleValue} = useInput();
   const [transformedText, setTransformedText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<AxiosError | null>(null);
 
-  const handleTransformTextStyle = () => {
-    switch (selectedOption?.value) {
-      case "사극체":
-        setTransformedText("어쩌시겠습니까?");
-        break;
-      case "잼민이체":
-        setTransformedText("어쩔티비~");
-        break;
-      default:
-        break;
+  const handleTransformTextStyle = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const result = await new Promise<string>((res) => {
+        setTimeout(() => {
+          res("변환된 문장");
+        }, 2000);
+      });
+
+      setTransformedText(result);
+    } catch (err) {
+      setError(err as AxiosError);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,13 +66,20 @@ export default function TextStyleGenerator() {
             </option>
           ))}
         </select>
-        <div className="flex flex-col gap-4">
-          <textarea className="h-52 overflow-auto p-1" value={textStyleValue} onChange={onChangeTextStyleValue} />
+        <div className="flex flex-col gap-2">
+          <textarea
+            className="h-52 resize-none overflow-auto p-1"
+            value={textStyleValue}
+            onChange={onChangeTextStyleValue}
+          />
 
-          <Button onClick={handleTransformTextStyle}>변환하기</Button>
+          {!transformedText && <Button onClick={handleTransformTextStyle}>변환하기</Button>}
+          {isLoading && <p>문체를 변환중입니다.</p>}
+          {error && <p className="text-red-500">문체 변환중 에러가 발생하였습니다.</p>}
           {transformedText && (
-            <div className="h-44 overflow-auto border border-black p-1">
-              <p>{transformedText}</p>
+            <div className="flex h-auto min-h-[200px] flex-col overflow-auto">
+              <h4 className="mb-4">문체 변환 결과</h4>
+              <p className=" flex-1 bg-white px-2 py-1">{transformedText}</p>
             </div>
           )}
         </div>

@@ -18,7 +18,7 @@ export default function NovelLayout({children}: NovelLayoutProps) {
   return (
     <div className="relative h-screen overflow-hidden bg-transparent">
       <div className="flex w-full flex-col overflow-hidden">
-        <nav className="z-10 max-w-full select-none bg-white">
+        <nav className="z-10 max-w-full select-none bg-white shadow-sm">
           <div className="relative h-[45px] w-full max-w-[100vw] opacity-100 transition-opacity">
             <div className="flex h-[45px] items-center justify-between overflow-hidden pl-[12px] pr-[10px]">
               <Link href="/" className="flex h-full items-center justify-center px-4 text-xl">

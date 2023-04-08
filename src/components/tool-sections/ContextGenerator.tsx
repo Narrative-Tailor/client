@@ -34,8 +34,9 @@ export default function ContextGenerator() {
           <textarea name="post-p" className="h-36 w-full p-1" value={postParagraph} onChange={onChangePostParagraph} />
         </div>
         {bridgeParagraph ? (
-          <div className="h-40 w-full overflow-y-auto border border-black p-1">
-            <p>{bridgeParagraph}</p>
+          <div className="h-auto w-full overflow-y-auto">
+            <h4 className="mb-3">중간 문맥 생성 결과</h4>
+            <p className="bg-white p-2">{bridgeParagraph}</p>
           </div>
         ) : (
           <Button onClick={handleBridgeParagraph}>

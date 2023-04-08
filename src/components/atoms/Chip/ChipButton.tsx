@@ -1,7 +1,7 @@
 const SELECTED_STYLE = "bg-[#585856] text-gray-200";
 const NOT_SELECTED_STYLE = "bg-white text-gray-500";
 const DISABLED_STYLE = "bg-gray-400 text-white";
-const DEFAULT_STYLE = "text-[16px] px-[10px] rounded-[10px] hover:opacity-80";
+const DEFAULT_STYLE = "text-[16px] px-[10px] rounded-[10px] hover:opacity-80 whitespace-nowrap";
 
 export interface ChipButtonProps {
   isSelected: boolean;

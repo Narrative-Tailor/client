@@ -74,6 +74,7 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
               style={{
                 background: chapterId && parseInt(chapterId, 10) === chapter.id ? "#585856" : "",
                 color: chapterId && parseInt(chapterId, 10) === chapter.id ? "white" : "black",
+                opacity: menuOpened ? 0.99 : 0,
               }}
             >
               <span className="flex-1 py-1">
@@ -104,6 +105,14 @@ export default function ChapterList({id, chapterId, menuOpened, onClickChapter, 
               </button>
             </li>
           ))}
+          {!isAdding && chapters?.length === 0 && (
+            <p
+              className="flex w-full cursor-pointer items-center justify-center px-2 py-1  text-[#585856] opacity-90"
+              onClick={handleClickAdd}
+            >
+              새로운 챕터를 추가해보세요.
+            </p>
+          )}
         </ul>
         {isAdding && (
           <input
