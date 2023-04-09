@@ -7,6 +7,7 @@ import useMount from "@hooks/useMount";
 import bookImage from "public/book.png";
 import useStoryStore, {Story} from "@/store/storyStore";
 import ChipButton from "@/components/atoms/Chip/ChipButton";
+import Button from "@/components/atoms/Button";
 
 function StoryItem({story}: {story: Story}) {
   const {id, title, description, chapters} = story;
@@ -69,9 +70,16 @@ export default function Home() {
 
         <div className="flex w-full flex-col gap-4">
           {mounted && stories.map((story) => <StoryItem story={story} key={`story-${story.id}`} />)}
+          {mounted && stories.length === 0 && (
+            <div
+              className="flex h-40 w-full cursor-pointer items-center justify-center border border-[#dcdcdc] bg-white p-8"
+              onClick={openModal}
+            >
+              새로운 작품을 만들어보세요!
+            </div>
+          )}
         </div>
       </div>
-
       <CreateNovelModal isOpen={isOpen} onCancel={closeModal} onConfirm={makeNewStory} />
     </Layout>
   );
