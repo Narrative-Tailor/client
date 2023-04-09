@@ -51,9 +51,11 @@ export default function NovelSettings() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStory]);
 
-  const handleChangeThumbnail = (files: FileList) => {
+  const handleChangeThumbnail = async (files: FileList) => {
     if (files[0]) {
+      const newPreview = await getBase64(files[0]);
       setThumbnail(files[0]);
+      setPreview({src: newPreview, name: `${currentStory?.title}-${Date.now()}`});
     }
   };
 
@@ -75,50 +77,34 @@ export default function NovelSettings() {
             <label className="text-[16px]">작품 이미지</label>
             <div className="flex w-full items-center justify-center p-4">
               <div className="relative flex aspect-square w-2/3 items-center justify-center bg-[#F2F2F0]">
-                {thumbnail && (
-                  <>
-                    <label
-                      htmlFor="new-story-thumbnail"
-                      className="absolute inset-0 flex h-full w-full cursor-pointer items-center justify-center"
-                    />
+                {preview && (
+                  <label
+                    htmlFor="new-story-thumbnail"
+                    className="absolute inset-0 flex h-full w-full cursor-pointer items-center justify-center"
+                  >
                     <img src={preview?.src} alt={preview?.name} className="h-full w-full object-cover" />
-                    <input
-                      type="file"
-                      name=""
-                      id="new-story-thumbnail"
-                      className="invisible"
-                      accept="image/*"
-                      onChange={(e) => {
-                        if (e.target.files) {
-                          handleChangeThumbnail(e.target.files);
-                        }
-                      }}
-                    />
-                  </>
+                  </label>
                 )}
 
-                {!thumbnail && (
-                  <>
-                    <label
-                      htmlFor="new-story-thumbnail"
-                      className="absolute inset-0 flex h-full w-full cursor-pointer items-center justify-center"
-                    >
-                      등록된 이미지가 없습니다.
-                    </label>
-                    <input
-                      type="file"
-                      name=""
-                      id="new-story-thumbnail"
-                      className="invisible"
-                      accept="image/*"
-                      onChange={(e) => {
-                        if (e.target.files) {
-                          handleChangeThumbnail(e.target.files);
-                        }
-                      }}
-                    />
-                  </>
+                {!preview && (
+                  <label
+                    htmlFor="new-story-thumbnail"
+                    className="absolute inset-0 flex h-full w-full cursor-pointer items-center justify-center"
+                  >
+                    등록된 이미지가 없습니다.
+                  </label>
                 )}
+                <input
+                  id="new-story-thumbnail"
+                  className="invisible"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      handleChangeThumbnail(e.target.files);
+                    }
+                  }}
+                />
               </div>
             </div>
           </div>
