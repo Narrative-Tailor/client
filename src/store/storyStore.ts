@@ -144,7 +144,6 @@ const useStoryStore = create<StoryState>()(
         },
         saveChapter: (storyId, chapterId, title, content) => {
           set((state) => {
-            console.log(storyId, chapterId, title, content);
             const newStories = [...state.stories];
 
             const storyIndex = state.stories.findIndex(({id}) => id === storyId);
