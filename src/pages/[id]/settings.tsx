@@ -71,8 +71,8 @@ export default function NovelSettings() {
 
   return (
     <NovelLayout id={id} hideSettings>
-      <div className="mx-auto mt-5 w-full max-w-[600px] ">
-        <div className="flex h-full w-full flex-col p-4">
+      <div className="mx-auto mt-5 w-full max-w-[600px]">
+        <div className="flex w-full flex-col p-4">
           <div className="w-full pb-4">
             <label className="text-[16px]">작품 이미지</label>
             <div className="flex w-full items-center justify-center p-4">
@@ -111,7 +111,7 @@ export default function NovelSettings() {
           <div className="w-full pb-4">
             <Input value={title} onChange={onChangeTitle} label="제목" labelStyle="horizontal" />
           </div>
-          <div className="w-full pb-4">
+          <div className="w-full">
             <Input
               value={description}
               onChange={onChangeDescription}
@@ -121,10 +121,7 @@ export default function NovelSettings() {
             />
           </div>
         </div>
-        <div
-          className="flex h-20 w-full flex-col
-        items-center gap-4"
-        >
+        <div className="flex h-20 w-full flex-col items-center gap-4">
           <Button size="full" theme="primary" onClick={handleSave}>
             저장
           </Button>
