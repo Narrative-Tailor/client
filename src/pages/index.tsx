@@ -7,7 +7,6 @@ import useMount from "@hooks/useMount";
 import bookImage from "public/book.png";
 import useStoryStore, {Story} from "@/store/storyStore";
 import ChipButton from "@/components/atoms/Chip/ChipButton";
-import Button from "@/components/atoms/Button";
 
 function StoryItem({story}: {story: Story}) {
   const {id, title, description, chapters} = story;
