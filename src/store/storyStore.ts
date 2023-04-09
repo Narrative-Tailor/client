@@ -57,22 +57,22 @@ const useStoryStore = create<StoryState>()(
     persist(
       (set) => ({
         stories: [
-          {
-            id: 1,
-            chapters: [],
-            title: "아웃스탠딩",
-            description: "아웃스탠딩 이야기",
-            createdAt: new Date("2023-01-18"),
-            updatedAt: new Date("2023-01-18"),
-          },
-          {
-            id: 2,
-            chapters: [],
-            title: "쿠베라",
-            description: "쿠베라 이야기",
-            createdAt: new Date("2018-05-23"),
-            updatedAt: new Date("2018-05-23"),
-          },
+          // {
+          //   id: 1,
+          //   chapters: [],
+          //   title: "아웃스탠딩",
+          //   description: "아웃스탠딩 이야기",
+          //   createdAt: new Date("2023-01-18"),
+          //   updatedAt: new Date("2023-01-18"),
+          // },
+          // {
+          //   id: 2,
+          //   chapters: [],
+          //   title: "쿠베라",
+          //   description: "쿠베라 이야기",
+          //   createdAt: new Date("2018-05-23"),
+          //   updatedAt: new Date("2018-05-23"),
+          // },
         ],
         addStory: async (title, description, thumbnail) => {
           const newStory = await saveStory(title, description, thumbnail);

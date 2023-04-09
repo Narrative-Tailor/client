@@ -23,7 +23,7 @@ import EpisodeGenerator from "@/components/tool-sections/EpisodeGenerator";
 
 const AUTOSAVE_INTERVAL_MS = 30000;
 
-const TABS = ["맥락", "문체", "그림", "연상어", "에피소드"];
+const TABS = ["문체", "그림", "연상어", "에피소드"];
 const CHIPS: ChipListItem[] = TABS.map((tab, idx) => ({id: idx + 1, label: tab}));
 const CHIP_IMAGE: Record<string, string> = {
   맥락: bridgeIcon.src,
